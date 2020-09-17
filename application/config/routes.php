@@ -52,3 +52,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+/*ROLES*/
+$route['panelroles'] = 'Roles/panel';
+$route['altarol'] = 'Roles/alta';
+$route['altarolbd'] = 'Roles/altabd';
+$route['bajarol/(:num)'] = 'Roles/baja/$1';
+$route['bajarolbd'] = 'Roles/bajabd';
+$route['editarol/(:num)'] = 'Roles/edita/$1';
+$route['editarolbd'] = 'Roles/editabd';
