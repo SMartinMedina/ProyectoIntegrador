@@ -61,3 +61,19 @@ $route['bajarol/(:num)'] = 'Roles/baja/$1';
 $route['bajarolbd'] = 'Roles/bajabd';
 $route['editarol/(:num)'] = 'Roles/edita/$1';
 $route['editarolbd'] = 'Roles/editabd';
+/*ESTADOS*/
+$route['panelestado'] = 'Estadost/panel';
+$route['altaestado'] = 'Estadost/alta';
+$route['altaestadobd'] = 'Estadost/altabd';
+$route['bajaestado/(:num)'] = 'EstadosT/baja/$1';
+$route['bajaestadobd'] = 'EstadosT/bajabd';
+$route['editaestado/(:num)'] = 'EstadosT/modificarEstado/$1';
+$route['editaestadobd'] = 'EstadosT/modificarEstadobd';
+/*ESPECIALIDADES*/
+$route['panelespecialidad'] = 'EspecialidadesE/panel';
+$route['altaespecialidad'] = 'EspecialidadesE/alta';
+$route['altaespecialidadbd'] = 'EspecialidadesE/altabd';
+$route['bajaespecialidad/(:num)'] = 'EspecialidadesE/baja/$1';
+$route['bajaespecialidadbd'] = 'EspecialidadesE/bajabd';
+$route['editaespecialidad/(:num)'] = 'EspecialidadesE/modificarespecialidad/$1';
+$route['editaespecialidadbd'] = 'EspecialidadesE/modificarespecialidadbd';

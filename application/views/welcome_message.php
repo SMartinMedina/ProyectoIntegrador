@@ -71,8 +71,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<h1>Welcome to CodeIgniter!</h1>
 
 	<div id="body">
-		<form id="panelRoles" method ="post" action="panelroles"> 
+		<form id="panelRoles" method ="post" action="<?php echo site_url('panelroles');?>"> 
 			<button class="btn btn-default" type="submit">Dashboard Roles</button>
+		</form>
+        <form id="panelestados" method ="post" action="<?php echo site_url('panelestado');?>"> 
+			<button class="btn btn-default" type="submit" >Dashboard Estados Turnos</button>
+		</form>
+        <form id="panelespecialidad" method ="post" action="<?php echo site_url('panelespecialidad');?>"> 
+			<button class="btn btn-default" type="submit" >Dashboard Especialidades</button>
 		</form>
 	</div>
 

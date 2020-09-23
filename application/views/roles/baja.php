@@ -1,6 +1,6 @@
 <h1>Baja</h1>
 <form id="bajarolbd" method ="post" action="<?php echo base_url();?>bajarolbd"> 
-<?php
+ <?php
 	echo $rol->nombre;
 ?>
 	<input type="hidden" name="id_rol" id="id_rol" value="<?php echo $rol->id; ?>">
