@@ -1,5 +1,5 @@
 <?php
-class EspecialidadesEmpleados extends CI_Model {
+class EspecialidadesEmpleadosCRUD extends CI_Model {
 		function __construct()
 	    {
 	        // Call the Model constructor

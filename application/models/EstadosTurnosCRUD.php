@@ -1,5 +1,5 @@
 <?php
-class EstadosTurnos extends CI_Model {
+class EstadosTurnosCRUD extends CI_Model {
 		function __construct()
 	    {
 	        // Call the Model constructor

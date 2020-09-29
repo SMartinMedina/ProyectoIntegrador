@@ -62,18 +62,45 @@ $route['bajarolbd'] = 'Roles/bajabd';
 $route['editarol/(:num)'] = 'Roles/edita/$1';
 $route['editarolbd'] = 'Roles/editabd';
 /*ESTADOS*/
-$route['panelestado'] = 'Estadost/panel';
-$route['altaestado'] = 'Estadost/alta';
-$route['altaestadobd'] = 'Estadost/altabd';
-$route['bajaestado/(:num)'] = 'EstadosT/baja/$1';
-$route['bajaestadobd'] = 'EstadosT/bajabd';
-$route['editaestado/(:num)'] = 'EstadosT/modificarEstado/$1';
-$route['editaestadobd'] = 'EstadosT/modificarEstadobd';
+$route['panelestado'] = 'EstadosTurnos/panel';
+$route['altaestado'] = 'EstadosTurnos/alta';
+$route['altaestadobd'] = 'EstadosTurnos/altabd';
+$route['bajaestado/(:num)'] = 'EstadosTurnos/baja/$1';
+$route['bajaestadobd'] = 'EstadosTurnos/bajabd';
+$route['editaestado/(:num)'] = 'EstadosTurnos/modificarEstado/$1';
+$route['editaestadobd'] = 'EstadosTurnos/modificarEstadobd';
 /*ESPECIALIDADES*/
-$route['panelespecialidad'] = 'EspecialidadesE/panel';
-$route['altaespecialidad'] = 'EspecialidadesE/alta';
-$route['altaespecialidadbd'] = 'EspecialidadesE/altabd';
-$route['bajaespecialidad/(:num)'] = 'EspecialidadesE/baja/$1';
-$route['bajaespecialidadbd'] = 'EspecialidadesE/bajabd';
-$route['editaespecialidad/(:num)'] = 'EspecialidadesE/modificarespecialidad/$1';
-$route['editaespecialidadbd'] = 'EspecialidadesE/modificarespecialidadbd';
+$route['panelespecialidad'] = 'EspecialidadesEmpleados/panel';
+$route['altaespecialidad'] = 'EspecialidadesEmpleados/alta';
+$route['altaespecialidadbd'] = 'EspecialidadesEmpleados/altabd';
+$route['bajaespecialidad/(:num)'] = 'EspecialidadesEmpleados/baja/$1';
+$route['bajaespecialidadbd'] = 'EspecialidadesEmpleados/bajabd';
+$route['editaespecialidad/(:num)'] = 'EspecialidadesEmpleados/modificarespecialidad/$1';
+$route['editaespecialidadbd'] = 'EspecialidadesEmpleados/modificarespecialidadbd';
+
+/* */
+
+/*USUARIOS*/
+$route['panelusuarios'] = 'Usuarios/panel';
+$route['altausuario'] = 'Usuarios/alta';
+$route['altausuariobd'] = 'Usuarios/altabd';
+$route['bajausuario/(:num)'] = 'Usuarios/baja/$1';
+$route['bajausuariobd'] = 'Usuarios/bajabd';
+$route['editausuario/(:num)'] = 'Usuarios/edita/$1';
+$route['editausuariobd'] = 'Usuarios/editabd';
+/*TURNOS*/
+$route['panelturno'] = 'Turnos/panel';
+$route['altaturno'] = 'Turnos/alta';
+$route['altaturnobd'] = 'Turnos/altabd';
+$route['bajaturno/(:num)'] = 'Turnos/baja/$1';
+$route['bajaturnobd'] = 'Turnos/bajabd';
+$route['editaturno/(:num)'] = 'Turnos/modificarEstado/$1';
+$route['editaturnobd'] = 'Turnos/modificarEstadobd';
+/*USUARIOS ESPECIALIDADES*/
+$route['panelusuarioespecialidad'] = 'UsuariosEspecialidades/panel';
+$route['altausuarioespecialidad'] = 'UsuariosEspecialidades/alta';
+$route['altausuarioespecialidad'] = 'UsuariosEspecialidades/altabd';
+$route['bajausuarioespecialidad/(:num)'] = 'UsuariosEspecialidades/baja/$1';
+$route['bajausuarioespecialidad'] = 'UsuarioEspUsuariosEspecialidadesecialidad/bajabd';
+$route['editausuarioespecialidad/(:num)'] = 'UsuariosEspecialidades/modificarespecialidad/$1';
+$route['editausuarioespecialidadbd'] = 'UsuariosEspecialidades/modificarespecialidadbd';
