@@ -1,6 +1,6 @@
-<h1>TEST DASHBOARD ESTADOS</h1>
+<h1>TEST DASHBOARD ESTADOS Turnos</h1>
 <form id="altaestado" method ="post" action="altaestado"> 
-	<button class="btn btn-default" type="submit">Alta Estado</button>
+	<button class="btn btn-default" type="submit">Alta Estados Turnos</button>
 </form>
 <?php
 	foreach($estados as $e){

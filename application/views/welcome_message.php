@@ -80,6 +80,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <form id="panelespecialidad" method ="post" action="<?php echo site_url('panelespecialidad');?>"> 
 			<button class="btn btn-default" type="submit" >Dashboard Especialidades</button>
 		</form>
+        <form id="panelturno" method ="post" action="<?php echo site_url('panelturno');?>"> 
+			<button class="btn btn-default" type="submit" >Dashboard Turnos</button>
+		</form>		
+        <form id="panelusuarios" method ="post" action="<?php echo site_url('panelusuarios');?>"> 
+			<button class="btn btn-default" type="submit" >Dashboard Usuarios</button>
+		</form>				
+        <form id="panelusuarioespecialidad" method ="post" action="<?php echo site_url('panelusuarioespecialidad');?>"> 
+			<button class="btn btn-default" type="submit" >Dashboard Usuarios Especialidades</button>
+		</form>		
 	</div>
 
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>

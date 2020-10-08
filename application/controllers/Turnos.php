@@ -16,8 +16,9 @@ class Turnos extends CI_Controller {
 	public function altabd(){
 		$id_cliente = $_POST['id_cliente'];
 		$id_empleado = $_POST['id_empleado'];
+		$id_servicio = $_POST['id_servicio'];
 		$id_estado_turno = $_POST['id_estado_turno'];
-		$this->turnosCRUD->altaTurno($id_cliente, $id_empleado, $id_estado_turno);
+		$this->turnosCRUD->altaTurno($id_cliente, $id_empleado,$id_servicio, $id_estado_turno);
 		$this->panel();
 	}
 	public function baja($id_turno){

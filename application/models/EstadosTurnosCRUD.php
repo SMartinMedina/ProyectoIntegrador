@@ -7,7 +7,8 @@ class EstadosTurnosCRUD extends CI_Model {
 	    }
         function getEstado($id_estado){
 	    	$q = $this->db->query('select 
-	    								*
+    									estados_turnos.id,
+										estados_turnos.nombre
 									from
 										estados_turnos
 									where
@@ -16,7 +17,8 @@ class EstadosTurnosCRUD extends CI_Model {
 	    }
 	    function getEstados(){
 	    	$r = $this->db->query('select 
-	    								*
+    									estados_turnos.id,
+										estados_turnos.nombre
 									from
 										estados_turnos
 									where

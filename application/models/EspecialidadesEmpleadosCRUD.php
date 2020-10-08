@@ -7,7 +7,8 @@ class EspecialidadesEmpleadosCRUD extends CI_Model {
 	    }
         function getEspecialidad($id_especialidades){
 	    	$q = $this->db->query('select 
-	    								*
+										especialidades_empleados.id,
+										especialidades_empleados.nombre
 									from
 										especialidades_empleados
 									where
@@ -16,7 +17,8 @@ class EspecialidadesEmpleadosCRUD extends CI_Model {
 	    }
 	    function getEspecialidades(){
 	    	$q = $this->db->query('select 
-	    								*
+										especialidades_empleados.id,
+										especialidades_empleados.nombre
 									from
 										especialidades_empleados
 									where

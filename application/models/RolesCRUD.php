@@ -7,7 +7,8 @@
 	    }
 	    function getRoles(){
 	    	$q = $this->db->query('select 
-	    								*
+    									roles.id,
+										roles.nombre
 									from
 										roles
 									where
@@ -16,7 +17,8 @@
 	    }
 	    function getRol($id_rol){
 	    	$q = $this->db->query('select 
-	    								*
+    									roles.id,
+										roles.nombre
 									from
 										roles
 									where

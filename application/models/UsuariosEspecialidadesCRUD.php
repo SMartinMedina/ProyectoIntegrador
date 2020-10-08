@@ -7,18 +7,42 @@
 	    }
 	    function getUsuariosEspecialidades(){
 	    	$q = $this->db->query('select 
-	    								*
+										usuarios_especialidades.id,
+										usuarios_especialidades.id_usuario,
+										empleado.nombre as nombre_empleado,
+										usuarios_especialidades.id_especialidad,
+										especialidad.nombre as nombre_especialidad_empleado
 									from
 										usuarios_especialidades
+									inner join
+										usuarios empleado
+									on
+										usuarios_especialidades.id_usuario = empleado.id
+									inner join
+										especialidades_empleados especialidad
+									on
+										especialidad.id = usuarios_especialidades.id_especialidad
 									where
 										usuarios_especialidades.fecha_baja is null');
 	    	return $q->result();
 	    }
 	    function getUsuarioEspecialidad($id_usuario_especialidad){
 	    	$q = $this->db->query('select 
-	    								*
+										usuarios_especialidades.id,
+										usuarios_especialidades.id_usuario,
+										empleado.nombre as nombre_empleado,
+										usuarios_especialidades.id_especialidad,
+										especialidad.nombre as nombre_especialidad_empleado
 									from
 										usuarios_especialidades
+									inner join
+										usuarios empleado
+									on
+										usuarios_especialidades.id_usuario = empleado.id
+									inner join
+										especialidades_empleados especialidad
+									on
+										especialidad.id = usuarios_especialidades.id_especialidad
 									where
 										usuarios_especialidades.id = '.$id_usuario_especialidad);
 	    	return $q->row();
