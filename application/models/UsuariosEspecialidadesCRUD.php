@@ -66,6 +66,34 @@
 	    								id_especialidad = '.$id_especialidad.'
     								where 
     									id = '.$id_usuario_especialidad);
-	    }	    	    	    
+	    }
+	    function cleanEspecialidadesEmpleado($id_empleado){
+	    	$q = $this->db->query('update usuarios_especialidades set fecha_baja = SYSDATE() where id_usuario = '.$id_empleado);
+	    	//return $q->result();
+	    }
+
+	    function getEspecialidadesEmpleado($id_empleado){
+	    	$q = $this->db->query('select 
+										usuarios_especialidades.id,
+										usuarios_especialidades.id_usuario,
+										empleado.nombre as nombre_empleado,
+										usuarios_especialidades.id_especialidad,
+										especialidad.nombre as nombre_especialidad_empleado
+									from
+										usuarios_especialidades
+									inner join
+										usuarios empleado
+									on
+										usuarios_especialidades.id_usuario = empleado.id
+									inner join
+										especialidades_empleados especialidad
+									on
+										especialidad.id = usuarios_especialidades.id_especialidad
+									where
+										usuarios_especialidades.id_usuario = '.$id_empleado.'
+									and	
+										usuarios_especialidades.fecha_baja is null');
+	    	return $q->result();
+	    }
 	}
 ?>

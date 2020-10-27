@@ -5,13 +5,20 @@ class UsuariosEspecialidades extends CI_Controller {
 	public function __construct(){
         parent::__construct();
         $this->load->model('usuariosEspecialidadesCRUD');
+        $this->load->model('usuariosCRUD');
+        $this->load->model('especialidadesEmpleadosCRUD');
 	}
 	public function panel(){
 		$usuariosEspecialidades = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidades();
 		$this->load->view("usuariosEspecialidades/dashboard", array("usuariosEspecialidades" =>$usuariosEspecialidades ));
 	}
 	public function alta(){
-		$this->load->view("usuariosEspecialidades/alta");
+		$empleados = $this->usuariosCRUD->getEmpleados();
+		$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
+		$this->load->view("usuariosEspecialidades/alta", 
+						array("especialidades" => $especialidades,
+							"empleados" => $empleados
+					));
 	}
 	public function altabd(){
 		$id_usuario = $_POST['id_usuario'];
@@ -38,5 +45,22 @@ class UsuariosEspecialidades extends CI_Controller {
 		$nombre = $_POST['nombre'];
 		$this->usuariosEspecialidadesCRUD->editaUsuarioEspecialidad($id_usuario_especialidad,$id_especialidad);
 		$this->panel();
+	}		
+
+	public function getEspecialidadesEmpleado(){
+		$id_empleado = $_POST['id_empleado'];
+		/*$especialidadesEmpleado =  $this->usuariosEspecialidadesCRUD->getEspecialidadesEmpleado($id_empleado);
+		$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();*/
+
+		$espDispEmp = $this->especialidadesEmpleadosCRUD->getEspecialidadesParaAgregarEmpleado($id_empleado);
+		$espEmp = $this->especialidadesEmpleadosCRUD->getEspecialidadesEmpleado($id_empleado);
+
+		
+
+		$data = array(
+					"espDispEmp" => $espDispEmp,
+					"espEmp" => $espEmp
+				);
+		echo json_encode($data);
 	}		
 }

@@ -75,7 +75,7 @@
 	    	$q = $this->db->query('insert into turnos(
 	    								id_cliente,
 	    								id_empleado,
-	    								id_servicio,
+	    								id_especialidad,
 	    								id_estado_turno,
 	    								fecha_alta) 
     								values (

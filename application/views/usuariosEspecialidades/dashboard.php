@@ -1,5 +1,5 @@
 <h1>TEST DASHBOARD Usuarios Especialidades</h1>
-<form id="altarol" method ="post" action="altarol"> 
+<form id="altausuarioespecialidad" method ="post" action="altausuarioespecialidad"> 
 	<button class="btn btn-default" type="submit">Alta Usuarios Especialidades</button>
 </form>
 <?php
