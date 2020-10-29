@@ -110,7 +110,7 @@
 														placeholder="Reingrese su password"
 														id="pass_confirm" 
 														name="pass_confirm"	
-														value="<?php echo set_value('pass'); ?>" 
+														value="<?php echo set_value('pass_confirm'); ?>" 
 														required>
 												</div>
 												<!--<div class="form-group">

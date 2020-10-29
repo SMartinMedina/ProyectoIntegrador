@@ -105,3 +105,4 @@ $route['bajausuarioespecialidad/(:num)'] = 'UsuariosEspecialidades/baja/$1';
 $route['bajausuarioespecialidadbd'] = 'UsuarioEspUsuariosEspecialidadesecialidad/bajabd';
 $route['editausuarioespecialidad/(:num)'] = 'UsuariosEspecialidades/modificarespecialidad/$1';
 $route['editausuarioespecialidadbd'] = 'UsuariosEspecialidades/modificarespecialidadbd';
+$route['login'] = 'Login/index';

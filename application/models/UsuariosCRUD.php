@@ -4,7 +4,24 @@
 	    {
 	        // Call the Model constructor
 	        parent::__construct();
-	    }
+		}
+		function getEmail($email){
+			$q = $this->db->query('select 
+										usuarios.id,
+										usuarios.id_rol,
+										usuarios.nombre as nombre_usuario,
+										usuarios.apellido as apellido_usuario,
+										usuarios.usuario,
+										usuarios.password as pass,
+										usuarios.email as email	
+									from
+										usuarios
+									where
+										usuarios.fecha_baja is null
+									and
+										usuarios.email="'.$email.'";');
+	    	return $q->result();
+		}
 	    function getUsuarios(){
 	    	$q = $this->db->query('select 
 										usuarios.id,
