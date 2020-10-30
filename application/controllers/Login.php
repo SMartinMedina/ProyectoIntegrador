@@ -20,15 +20,19 @@ class Login extends CI_Controller {
 	}
 	public function panel()
 	{
-		$turnos = $this->turnosCRUD->getTurnos();
-		/*$data
-		$this->load->view(array('login/login.php');*/
-		$this->load->view("index.php", 
-								array(
-									"header" => 'header_unlogged.php',
-									"main" => 'turnos/panel.php',
-									"footer" => 'footer_unlogged.php',
-									"turnos" => $turnos ));
+		if($this->session->userdata('id_rol_usuario') == 1){
+			$turnos = $this->turnosCRUD->getTurnos();
+			/*$data
+			$this->load->view(array('login/login.php');*/
+			$this->load->view("index.php", 
+									array(
+										"header" => 'header_unlogged.php',
+										"main" => 'turnos/panel.php',
+										"footer" => 'footer_unlogged.php',
+										"turnos" => $turnos ));
+		}else{
+			redirect('login');
+		}	
 	}
 	public function signupForm()
 	{
@@ -81,43 +85,34 @@ class Login extends CI_Controller {
 
 	public function trySignup()
 	{
-		
+	
 		$this->form_validation->set_rules('nombre', 'Nombre', 'required',
 											array('required' => 'Debe ingresar su %s.'));
 		
-		$this->form_validation->set_rules('nombre', 'Nombre', 'required',
+		$this->form_validation->set_rules('apellido', 'Apellido', 'required',
 											array('required' => 'Debe ingresar su %s.'));
 //		matches
 
-		$this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email',
+		$this->form_validation->set_rules('email', 'Correo Electrónico', 'required|valid_email|callback_verificar_Mail[email]',
 											array('required' => 'Debe ingresar su %s.',
-												'valid_email' => 'Debe ser un %s válido'));
+												'valid_email' => 'Debe ser un %s válido',
+												'verificar_Mail'=>'Este %s ya esta siendo usado por otro usuario'));
 		$this->form_validation->set_rules('pass', 'Password', 'required',
 											array('required' => 'Debe ingresar su %s.'));
+		$this->form_validation->set_rules('pass_confirm', 'Contraseñas', 'required|matches[pass]',
+											array('required' => 'Debe ingresar su %s.',
+													'matches'=>'Las dos %s que ingreso son diferentes'));
 
 		if ($this->form_validation->run() == FALSE)
 		{
-			$this->index();
-		}
-		else
-		{
-			//Logueo exitoso.
-			//$this->load->view('formsuccess');
+			$this->signupForm();
+		}else{
+			$nombre = $this->input->post('nombre');
+			$apellido = $this->input->post('apellido');
 			$email = $this->input->post('email');//$email = $_POST['email'];
 			$pass = $this->input->post('pass');//$pass = $_POST['pass'];
-
-			$usuario = $this->usuariosCRUD->getUsuariosLogin($email, $pass);
-			if(sizeof($usuario) == 1){
-				$usuarioLogged = $usuario[0];
-				$this->setSessionUsuario($usuarioLogged->id, 
-										$usuarioLogged->id_rol, 
-										$usuarioLogged->nombre_usuario, 
-										$usuarioLogged->apellido_usuario, 
-										$usuarioLogged->usuario, 
-										$usuarioLogged->email);
-			}else{
-				$this->index();
-			}
+			$usuario = $this->usuariosCRUD->altaUsuario(3,$nombre,$apellido,$email,$pass,$email);//id=3 es de cliente
+			 $this->index();
 		}
 	}	
 
@@ -142,5 +137,14 @@ class Login extends CI_Controller {
 		$this->session->unset_userdata($session);
 		$this->index();
 
+	}
+	public function verificar_Mail($email){
+		$usuario = $this->usuariosCRUD->getEmail($email);
+		if(sizeof($usuario)  > 0){
+			return FALSE;
+		}else{
+			 
+			return TRUE;
+		}
 	}
 }
