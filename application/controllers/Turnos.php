@@ -49,11 +49,11 @@ class Turnos extends CI_Controller {
 				$id_empleado = $_POST[$POSTEmpServicio];
 				$id_servicio = $id_especialidad;
 				$id_estado_turno = 1; //Se setea por default estado "EN ESPERA"
-				var_dump(" POSTEmpServicio: ".$POSTEmpServicio. 
+				/*var_dump(" POSTEmpServicio: ".$POSTEmpServicio. 
 						" id_cliente: ".$id_cliente. 
 						" id_empleado: ".$id_empleado.
 						" id_servicio: ".$id_servicio.
-						" id_estado_turno: ".$id_estado_turno);
+						" id_estado_turno: ".$id_estado_turno);*/
 						
 				$this->turnosCRUD->altaTurno($id_cliente, $id_empleado,$id_servicio, $id_estado_turno);
 			}
