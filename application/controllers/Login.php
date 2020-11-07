@@ -7,6 +7,8 @@ class Login extends CI_Controller {
         parent::__construct();
         $this->load->model('usuariosCRUD');
         $this->load->model('turnosCRUD');
+        $this->load->model('especialidadesEmpleadosCRUD');
+        $this->load->model('usuariosEspecialidadesCRUD');
 	}
 	public function index()
 	{
@@ -30,6 +32,21 @@ class Login extends CI_Controller {
 										"main" => 'turnos/panel.php',
 										"footer" => 'footer_unlogged.php',
 										"turnos" => $turnos ));
+		}else if($this->session->userdata('id_rol_usuario') == 3){ // CLIENTE
+			$clientes = $this->usuariosCRUD->getClientes();
+			$empleados = $this->usuariosCRUD->getEmpleados();
+			$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
+			$empleados_especialidades = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidades();
+			$this->load->view("index.php", 
+						array(
+							"header" => 'header_unlogged.php',
+							"main" => 'cliente/menu.php',
+							"footer" => 'footer_unlogged.php',
+							"clientes" => $clientes,
+							"empleados" => $empleados,
+							"especialidades" => $especialidades,
+							"empleados_especialidades" => $empleados_especialidades));
+
 		}else{
 			redirect('login');
 		}	

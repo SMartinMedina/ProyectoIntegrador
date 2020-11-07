@@ -10,4 +10,8 @@
 		<!-- Init JavaScript -->
 		<script src="<?php echo base_url();?>dist/js/init.js"></script>
 
+
+
+
+
 </html>

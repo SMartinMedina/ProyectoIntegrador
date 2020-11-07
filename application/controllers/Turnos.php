@@ -24,6 +24,20 @@ class Turnos extends CI_Controller {
 			redirect('login');
 		}	
 	}
+	public function panelTurnosPorCliente(){
+		if($this->session->userdata('id_rol_usuario') == 3){	
+			$turnos = $this->turnosCRUD->getTurnosClienteById($this->session->userdata('id_usuario'));
+			$this->load->view("index.php", 
+								array(
+									"header" => 'header_unlogged.php',
+									"main" => 'cliente/turnos.php',
+									"footer" => 'footer_unlogged.php',
+									"turnos" => $turnos ));
+		}else{
+			redirect('login');
+		}	
+	}
+	
 	public function alta(){
 		if($this->session->userdata('id_rol_usuario') == 1){
 			//$roles = "";
@@ -43,9 +57,31 @@ class Turnos extends CI_Controller {
 								"empleados" => $empleados,
 								"empleados_especialidades" => $empleados_especialidades
 								));
+		}else if($this->session->userdata('id_rol_usuario') == 3){
+			$clientes = $this->usuariosCRUD->getClientes();
+			$empleados = $this->usuariosCRUD->getEmpleados();
+			$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
+			$empleados_especialidades = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidades();
+			$this->load->view("index.php", 
+						array(
+							"header" => 'header_unlogged.php',
+							"main" => 'cliente/alta.php',
+							"footer" => 'footer_unlogged.php',
+							"clientes" => $clientes,
+							"empleados" => $empleados,
+							"especialidades" => $especialidades,
+							"empleados_especialidades" => $empleados_especialidades));
+
 		}else{
 				redirect('login');
 		}							
+	}
+	function menuCliente(){
+		$this->load->view("index.php", 
+			array(
+				"header" => 'header_unlogged.php',
+				"main" => 'cliente/menu.php',
+				"footer" => 'footer_unlogged.php'));
 	}
 	public function altabd(){
 		if($this->session->userdata('id_rol_usuario') == 1){
@@ -96,6 +132,25 @@ class Turnos extends CI_Controller {
 					$id_estado_turno = $_POST['id_estado_turno'];
 					$this->turnosCRUD->altaTurno($id_cliente, $id_empleado,$id_servicio, $id_estado_turno);*/
 					$this->panel();
+		}if($this->session->userdata('id_rol_usuario') == 3){
+
+			foreach ($_POST['especialidades'] as $id_especialidad) {
+
+				$POSTEmpServicio = "sel_servicio_".$id_especialidad;
+				if($_POST[$POSTEmpServicio] != 0){
+					$id_cliente = $this->session->userdata('id_usuario');
+					$idservicio_idempleado = $_POST[$POSTEmpServicio];
+					$idservicio_idempleado_arr = explode("-", $idservicio_idempleado);
+					$id_empleado = $idservicio_idempleado_arr[1]; // 
+					$id_servicio = $id_especialidad;
+					$id_estado_turno = 1; //Se setea por default estado "EN ESPERA"
+					$this->turnosCRUD->altaTurno($id_cliente, $id_empleado,$id_servicio, $id_estado_turno);
+					$this->menuCliente();
+				}else{
+
+					// A DEFINIR
+				}
+			}
 		}else{
 			redirect('login');
 		}	
