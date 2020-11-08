@@ -319,9 +319,20 @@ class Usuarios extends CI_Controller {
 				$id_rol= $this->session->userdata('id_rol_usuario');
 				$id=$this->session->userdata('id_usuario');
 				$usuario=$this->session->userdata('usuario_usuario');
-				$usuario = $this->usuariosCRUD->editaUsuario($id,$id_rol,$nombre,$apellido,$usuario,$email);//id=3 es de cliente
-				$this->perfil();
+				$this->usuariosCRUD->editaUsuario($id,$id_rol,$nombre,$apellido,$usuario,$email);//id=3 es de cliente
+				
 				//$this->mandar_Mail();
+					$nueva_session = array(
+						'id_usuario'  => $id,
+						'id_rol_usuario' => $id_rol,
+						'nombre_usuario' => $nombre,
+						'apellido_usuario' => $apellido,
+						'usuario_usuario' => $usuario,
+						'email_usuario' => $email
+				);
+		
+				$this->session->set_userdata($nueva_session);
+				$this->perfil();
 			}
 		}else{
 			redirect('login');
