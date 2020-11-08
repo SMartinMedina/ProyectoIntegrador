@@ -1,4 +1,4 @@
-			<div class="fixed-sidebar-left">
+<div class="fixed-sidebar-left">
 				<ul class="nav navbar-nav side-nav nicescroll-bar">
 					<li class="navigation-header">
 						<span>Main</span> 
@@ -71,11 +71,62 @@
 																"active" => $estadosTurnosActive ));
 
 ?>
-					<li><hr class="light-grey-hr mb-10"></li><!-- LINEA DIVISORIA -->
+				
+<?php
+		}else if($this->session->userdata('id_rol_usuario') == 2){
+			$urlParts = explode("/", $main);
+			$seccionUrl = $urlParts[0]; 
+			$lista = "";
+			switch ($seccionUrl) {
+				case 'turnos':
+					$lista = "'active'";
+					break;							
+				default:
+					
+					break;
+			}
+			$this->load->view('general/boton_menu_lateral.php', array(
+																"seccionUrl" => "turnos",
+																"seccion" => "Lista de turnos",
+																"icon" => " zmdi-book ",
+																"active" => $lista ));
 
-<?php			
+		}else if($this->session->userdata('id_rol_usuario') == 4){
+			$urlParts = explode("/", $main);
+			$seccionUrl = $urlParts[0]; 
+			$lista = "";
+			switch ($seccionUrl) {
+				case 'turnos':
+					$lista = "'active'";
+					break;							
+				default:
+					
+					break;
+			}
+			$this->load->view('general/boton_menu_lateral.php', array(
+																"seccionUrl" => "turnos",
+																"seccion" => "Lista de turnos de especialistas",
+																"icon" => " zmdi-book ",
+																"active" => $lista ));
+
 		}
-?>
+?>					
+	<li><hr class="light-grey-hr mb-10"></li><!-- LINEA DIVISORIA -->
+					<li>
+					<?php 
+						$linkLogout = "<div class=\"pull-left\">";
+						$linkLogout .= "<i class=\"zmdi zmdi-book mr-20\"></i>";
+						$linkLogout .= "<span class=\"right-nav-text\">Perfil</span>";
+						$linkLogout .= "</div>";
+						$linkLogout .= "<div class=\"clearfix\"></div>";							
+						echo anchor(
+							'usuarios/perfil',	//'controller/function/uri', 
+							$linkLogout,		//'Link', 
+							'class=""
+							'); 
+					//<a href="http://domain.com/index.php/controller/function/uri" class="link-class">Link</a>
+					?>
+					</li>
 					<li>
 					<?php 
 						$linkLogout = "<div class=\"pull-left\">";

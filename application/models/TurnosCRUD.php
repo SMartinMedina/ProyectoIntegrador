@@ -4,6 +4,41 @@
 	    {
 	        // Call the Model constructor
 	        parent::__construct();
+		}
+		function getTurnosEmp($id_empleado){
+	    	$q = $this->db->query('select 
+										turnos.id as id_turno,
+										turnos.id_cliente,
+										cliente.nombre as nombre_cliente,
+										turnos.id_empleado,
+										turnos.id_estado_turno,
+										estados_turnos.nombre as nombre_estado_turno,
+										turnos.id_especialidad,
+										especialidades_empleados.nombre as nombre_especialidades_usuarios
+									from
+										turnos
+									inner join
+										usuarios as cliente
+									on
+										turnos.id_cliente = cliente.id
+									inner join
+										especialidades_empleados
+									on
+										turnos.id_especialidad = especialidades_empleados.id
+									inner join
+										estados_turnos
+									on
+										turnos.id_estado_turno = estados_turnos.id
+									where
+										turnos.fecha_baja is null
+									and
+										turnos.id_estado_turno!=3
+									and
+										turnos.id_estado_turno!=4
+									and
+										turnos.id_empleado='.$id_empleado.'
+										order by turnos.id');
+	    	return $q->result();
 	    }
 	    function getTurnos(){
 	    	$q = $this->db->query('select 

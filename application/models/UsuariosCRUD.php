@@ -162,6 +162,29 @@
 	    								id_rol = '.$id_rol.'
     								where 
     									id = '.$id_usuario);
-	    }	    	    	    
-	}
+		}
+		function updateUsuario($id_usuario,$nombre,$apellido,$password,$email){
+			$q = $this->db->query('update usuarios set 
+									nombre = "'.$nombre.'",
+									apellido = "'.$apellido.'",
+									email = "'.$email.'",
+									password= md5("'.$password.'")
+								where 
+									id = '.$id_usuario.';');
+		}    
+		function recoverUsuario($password,$pass,$email){
+			$q = $this->db->query('update usuarios set 
+										password= md5("'.$password.'")
+								where 
+									password = md5("'.$pass.'")
+								and
+									usuario="'.$email.'"');
+		}
+		function cambiarPass($password,$id){
+			$q = $this->db->query('update usuarios set 
+										password= md5("'.$password.'")
+								where 
+									id='.$id);
+		}	    
+	}	    	    	    
 ?>

@@ -276,5 +276,85 @@ class Usuarios extends CI_Controller {
 		}else{
 				redirect('login');
 		}	
-	}		
+	}	
+	public function perfil(){
+		$se=$this->session->userdata('id_rol_usuario');
+		if(isset($se)){
+			$this->load->view("index.php", 
+										array(
+										"header" => 'header_unlogged.php',
+										"main" => 'usuarios/perfil.php',
+										"footer" => 'footer_unlogged.php',
+										));
+		}else{
+				redirect('login');
+		}
+	}
+	public function perfilbd(){
+		$se=$this->session->userdata('id_rol_usuario');
+		if(isset($se)){
+			$this->form_validation->set_rules('nombre', 'Nombre', 'required|min_length[8]|max_length[50]',
+										array(
+											'required' => 'Debe ingresar un %s.',
+											'min_length' => 'El %s debe contar con 8 caracteres como mínimo.',
+											'max_length' => 'El %s debe contar con 50 caracteres como máximo.'
+										));
+			$this->form_validation->set_rules('apellido', 'Apellido', 'max_length[50]',
+												array(
+													'max_length' => 'El %s debe contar con 50 caracteres como máximo.'
+												));
+			$this->form_validation->set_rules('email', 'Email', 'required|valid_email',
+													array(
+														'required' => 'Debe seleccionar un %s.',
+														'valid_email' => 'Debe ingresar un %s válido.'
+													));		
+			
+			if ($this->form_validation->run() == FALSE)
+			{
+				$this->perfil();
+			}else{
+				$nombre = $this->input->post('nombre');
+				$apellido = $this->input->post('apellido');
+				$email = $this->input->post('email');//$email = $_POST['email'];
+				$id_rol= $this->session->userdata('id_rol_usuario');
+				$id=$this->session->userdata('id_usuario');
+				$usuario=$this->session->userdata('usuario_usuario');
+				$usuario = $this->usuariosCRUD->editaUsuario($id,$id_rol,$nombre,$apellido,$usuario,$email);//id=3 es de cliente
+				$this->perfil();
+				//$this->mandar_Mail();
+			}
+		}else{
+			redirect('login');
+		}
+	}
+												
+	public function cambiar_pass(){
+		$this->load->view("index.php", 
+		array(
+		"header" => 'header_unlogged.php',
+		"main" => 'usuarios/pass.php',
+		"footer" => 'footer_unlogged.php'));
+	}
+	public function cambiar_passbd(){
+		$this->form_validation->set_rules('pass', 'Pass', 'required|min_length[8]',
+		array('required' => 'Debe ingresar su %s.',
+				'min_length'=>'Su %s debe tener 8 caracteres por lo minimo.'));	
+		$this->form_validation->set_rules('pass_confirm', 'Contraseñas', 'required|matches[pass]',
+			array('required' => 'Debe ingresar su %s.',
+					'matches'=>'Las dos %s que ingreso son diferentes'));
+			
+		if ($this->form_validation->run() == FALSE)
+					{
+						$this->cambiar_pass();
+					}else{
+						$pass=$this->input->post('pass');
+						$id=$this->session->userdata('id_usuario');
+						$usuario = $this->usuariosCRUD->cambiarPass($pass,$id);
+						$this->cambiar_pass();
+						
+					}
+	}
+
 }
+	
+
