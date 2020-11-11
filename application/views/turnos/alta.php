@@ -124,18 +124,38 @@
 													<select class="form-control" id="sel_<?php echo $tagId; ?>" 
 															name ="sel_<?php echo $tagName; ?>" 
 															>
-														<option value = "0">Cualquiera</option>
-													
 <?php
 		$cantEspecialistas = 0;
+		$min_demora = 0;
+		$flag = 0;
 		foreach ($empleados_especialidades as $ee) {
 			if($ee->id_especialidad == $e->id){
 				$cantEspecialistas++;
 				$chkId = "servicioEmp-".$e->id."-".$ee->id_usuario;
 				$chkName = $chkId;
+
+				/**/
+				foreach ($demora_empleado as $de) {
+					if($de['id_usuario'] == $ee->id_usuario){
+						$demoraEmpleadoEnMin =  "(".$de['demora_empleado']."min de Espera)";
+						if($flag == 0){
+							$min_demora = intVal($de['demora_empleado']);
+							$flag = 1;
+						}
+						if($min_demora > intVal($de['demora_empleado'])){
+							$selected = "selected = 'selected'";
+							$min_demora = intVal($de['demora_empleado']);
+						}else{
+							$selected = "";
+						}
+					}
+				}
+
 ?>
-													<option value="<?php echo $ee->id_usuario; ?>">
-														<?php echo $ee->nombre_empleado; ?>
+													<option value="<?php echo $ee->id_usuario; ?>" 
+														<?php echo $selected;?>>
+														<?php echo $ee->nombre_empleado." ".$demoraEmpleadoEnMin; ?>
+																											
 													</option>
 <?php
 				

@@ -111,6 +111,57 @@
 	    	return $q->result();
 	    }
 
+	    function getCantTurnosEnEsperaPorEmpleadoPorEsp($id_empleado){
+	    	$q = $this->db->query('select 
+										count(*) as cant,
+										turnos.id_especialidad as id_especialidad
+									from
+										turnos
+									where
+										id_empleado = '.$id_empleado.'
+									and
+										id_estado_turno = 1
+									group by
+										id_especialidad
+									order by id_especialidad asc;');
+	    	return $q->result();
+
+	    }
+
+	    function getCantTurnosEnEsperaPorEmpPorEsp($id_empleado, $id_servicio){
+	    	$q = $this->db->query('select 
+										count(*) as cant,
+										turnos.id_especialidad as id_especialidad
+									from
+										turnos
+									where
+										id_empleado = '.$id_empleado.'
+									and
+										id_especialidad = '.$id_servicio.'
+									and									
+										id_estado_turno = 1');
+	    	return $q->result();
+
+	    }
+
+
+	    
+
+	    function getDemoraEmpleados($id_empleado){
+	    	$q = $this->db->query('select
+										tiempo_estimado_especialista.id_especialista,
+										tiempo_estimado_especialista.id_servicio,
+										tiempo_estimado_especialista.tiempo_demora
+									from
+										tiempo_estimado_especialista
+									where
+										fecha_baja is null
+									and
+										id_especialista = '.$id_empleado);
+	    	return $q->result();
+
+	    }	    
+
 	    function getTurno($id_turno){
 	    	$q = $this->db->query('select 
 	    								turnos.id as id_turno,

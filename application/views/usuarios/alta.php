@@ -132,7 +132,7 @@
 												</div>
 												<div class="form-group" id = "div_especialidades_empleado">
 													<label class="control-label mb-10" for="email">
-														Especialidades:
+														Especialidades (Duración Promedio Servicio):
 													</label>
 <?php 
 	foreach ($especialidades as $e) {
@@ -140,10 +140,18 @@
 	<div class="checkbox checkbox-success">
 		<input id="checkbox<?php echo $e->id; ?>" type="checkbox" 
 			name ="especialidades[]" 
-			value="<?php echo $e->id; ?>">
+			value="<?php echo $e->id; ?>"
+			onclick="mostrarInputDuracion(this)">
 		<label for="checkbox<?php echo $e->id; ?>">
 			<?php echo $e->nombre;?>
 		</label>
+		<input 
+			type="text" 
+			class="form-control"  
+			id="demora_min_<?php echo $e->id; ?>" 
+			name="demora_min_<?php echo $e->id; ?>" 
+			placeholder="20min"
+			style = "padding-left: 20px; display: none;">
 	</div>
 
 
@@ -178,6 +186,16 @@
 		</div>
 	</body>
 	<script type="text/javascript">
+		function mostrarInputDuracion(check){
+			var input_checkeado = check.value;
+			var namefield_demora = "demora_min_"+input_checkeado;
+			if(check.checked){				
+				$("#"+namefield_demora).show();
+			}else{
+				$("#"+namefield_demora).hide();
+			}
+
+		}
 		$(function() {
 		    //$('#div_especialidades_empleado').hide(); 
 		    $().ready(function(){

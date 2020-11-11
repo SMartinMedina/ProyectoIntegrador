@@ -107,9 +107,6 @@ $this->load->view("general/menu_lateral.php");
 													<select class="form-control" id="sel_<?php echo $tagId; ?>" 
 															name ="sel_<?php echo $tagName; ?>" 
 															onchange = "confirmaEmp(this)">
-														<option value = "<?php echo $e->id.'-0'; ?>">
-															Cualquiera
-														</option>
 													
 <?php
 		$cantEspecialistas = 0;
@@ -118,9 +115,26 @@ $this->load->view("general/menu_lateral.php");
 				$cantEspecialistas++;
 				$chkId = "servicioEmp-".$e->id."-".$ee->id_usuario;
 				$chkName = $chkId;
+				/**/
+				foreach ($demora_empleado as $de) {
+					if($de['id_usuario'] == $ee->id_usuario){
+						$demoraEmpleadoEnMin =  "(".$de['demora_empleado']."min de Espera)";
+						if($flag == 0){
+							$min_demora = intVal($de['demora_empleado']);
+							$flag = 1;
+						}
+						if($min_demora > intVal($de['demora_empleado'])){
+							$selected = "selected = 'selected'";
+							$min_demora = intVal($de['demora_empleado']);
+						}else{
+							$selected = "";
+						}
+					}
+				}
 ?>
-														<option value="<?php echo $e->id.'-'.$ee->id_usuario; ?>">
-															<?php echo $ee->nombre_empleado; ?>
+														<option value="<?php echo $e->id.'-'.$ee->id_usuario; ?>"
+															<?php echo $selected;?>>
+														<?php echo $ee->nombre_empleado." ".$demoraEmpleadoEnMin; ?>
 														</option>
 <?php
 				
@@ -179,21 +193,21 @@ $this->load->view("general/menu_lateral.php");
 <?php												
 											}
 ?>
+											<button class = "btn btn-primary  text-aling-right" id = "finishButtonForm">
+												Confirmar turno
+											</button>
 
 <br /><br /><br /><br />
 
 									<?php
 										echo anchor(
 											'turnos/alta',	//'controller/function/uri', 
-											'<button class="btn btn-default text-aling-right">Volver al inicio</button>',		//'Link', 
+											'Volver al inicio',		//'Link', 
 											'class=""'); 
 ?>
 											
 											
 
-											<button class = "btn btn-primary  text-aling-right" id = "finishButtonForm">
-												Confirmar turno
-											</button>
 										</section>
 
 									</div>
@@ -228,6 +242,28 @@ $this->load->view("general/menu_lateral.php");
 
 				if( $("#cant-esp-"+id_servicio).val() > 0){
 					$("#sel_servicio_"+id_servicio).show(); //MUESTRO EL DESPLEGABLE DE ESPECIALISTAS SI EXISTEN
+
+
+					if($("#sel_servicio_"+id_servicio).val()){
+						var servEmp = $("#sel_servicio_"+id_servicio).val();
+
+						var res = servEmp.split("-");
+
+						var id_servicio = res[0];
+						var id_empleado = res[1];
+
+						var idConfirmEsp    = "esp-"+id_servicio;
+						var idConfirmEspEmp = "esp-emp-"+id_servicio+"-"+id_empleado;
+
+
+
+						var todosLosEspecialistasXespecialidad = "esp-emp-"+id_servicio;
+
+						$("."+todosLosEspecialistasXespecialidad).hide(); 
+
+						$("#"+idConfirmEsp).show(); 
+						$("#"+idConfirmEspEmp).show(); 
+					}
 				}
 			}else{
 

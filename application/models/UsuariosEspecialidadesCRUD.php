@@ -11,7 +11,8 @@
 										usuarios_especialidades.id_usuario,
 										empleado.nombre as nombre_empleado,
 										usuarios_especialidades.id_especialidad,
-										especialidad.nombre as nombre_especialidad_empleado
+										especialidad.nombre as nombre_especialidad_empleado,
+										usuarios_especialidades.demora_min
 									from
 										usuarios_especialidades
 									inner join
@@ -23,7 +24,8 @@
 									on
 										especialidad.id = usuarios_especialidades.id_especialidad
 									where
-										usuarios_especialidades.fecha_baja is null');
+										usuarios_especialidades.fecha_baja is null
+									order by usuarios_especialidades.id_usuario');
 	    	return $q->result();
 	    }
 	    function getUsuarioEspecialidad($id_usuario_especialidad){
@@ -47,14 +49,16 @@
 										usuarios_especialidades.id = '.$id_usuario_especialidad);
 	    	return $q->row();
 	    }
-	    function altaUsuarioEspecialidad($id_usuario, $id_especialidad){
+	    function altaUsuarioEspecialidad($id_usuario, $id_especialidad, $demora_min){
 	    	$q = $this->db->query('insert into usuarios_especialidades(
 	    								id_usuario,
 	    								id_especialidad,
+	    								demora_min,
 	    								fecha_alta) 
     								values (
 	    								'.$id_usuario.',
 	    								'.$id_especialidad.',
+	    								'.$demora_min.',
 	    								SYSDATE()
     								)');
 	    }	    
@@ -78,6 +82,7 @@
 										usuarios_especialidades.id_usuario,
 										empleado.nombre as nombre_empleado,
 										usuarios_especialidades.id_especialidad,
+										usuarios_especialidades.demora_min,
 										especialidad.nombre as nombre_especialidad_empleado
 									from
 										usuarios_especialidades

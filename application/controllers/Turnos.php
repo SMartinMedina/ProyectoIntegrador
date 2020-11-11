@@ -81,8 +81,33 @@ class Turnos extends CI_Controller {
 			$clientes = $this->usuariosCRUD->getClientes();
 			$empleados = $this->usuariosCRUD->getEmpleados();
 			$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
-			$empleados_especialidades = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidades();
-			//$especialidades = "";
+			$empleados_especialidades_bd = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidades();
+			$empleados_especialidades = array();
+
+			foreach ($empleados as $e) {
+				$cant_minutos_demora = 0;
+				foreach ($empleados_especialidades_bd as $ee) {
+					if($e->id == $ee->id_usuario){
+						$cantTurnosEnEsperaPorEmpPorEsp = $this->turnosCRUD->getCantTurnosEnEsperaPorEmpPorEsp(
+																					$ee->id_usuario,
+																					$ee->id_especialidad);
+					
+						$cant_minutos_demora = intval($cant_minutos_demora) + (intval($cantTurnosEnEsperaPorEmpPorEsp[0]->cant) * intval($ee->demora_min));
+					}
+				}
+				$emp_esp = array(
+								'id' => $ee->id, 
+								'id_usuario' => $e->id, 
+								'nombre_empleado' => $ee->nombre_empleado, 
+								'id_especialidad' => $ee->id_especialidad, 
+								'nombre_especialidad_empleado' => $ee->nombre_especialidad_empleado, 
+								'demora_empleado' => $cant_minutos_demora 
+							);
+				array_push($empleados_especialidades, $emp_esp);
+
+			}
+
+			
 
 			$this->load->view("index.php", 
 								array(
@@ -92,13 +117,42 @@ class Turnos extends CI_Controller {
 								"clientes" => $clientes,
 								"especialidades" => $especialidades,
 								"empleados" => $empleados,
-								"empleados_especialidades" => $empleados_especialidades
+								"empleados_especialidades" => $empleados_especialidades_bd,
+								"demora_empleado" => $empleados_especialidades
 								));
 		}else if($this->session->userdata('id_rol_usuario') == 3){
 			$clientes = $this->usuariosCRUD->getClientes();
 			$empleados = $this->usuariosCRUD->getEmpleados();
 			$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
-			$empleados_especialidades = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidades();
+			$empleados_especialidades_bd = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidades();
+
+
+			$empleados_especialidades = array();
+
+			foreach ($empleados as $e) {
+				$cant_minutos_demora = 0;
+				foreach ($empleados_especialidades_bd as $ee) {
+					if($e->id == $ee->id_usuario){
+						$cantTurnosEnEsperaPorEmpPorEsp = $this->turnosCRUD->getCantTurnosEnEsperaPorEmpPorEsp(
+																					$ee->id_usuario,
+																					$ee->id_especialidad);
+					
+						$cant_minutos_demora = intval($cant_minutos_demora) + (intval($cantTurnosEnEsperaPorEmpPorEsp[0]->cant) * intval($ee->demora_min));
+					}
+				}
+				$emp_esp = array(
+								'id' => $ee->id, 
+								'id_usuario' => $e->id, 
+								'nombre_empleado' => $ee->nombre_empleado, 
+								'id_especialidad' => $ee->id_especialidad, 
+								'nombre_especialidad_empleado' => $ee->nombre_especialidad_empleado, 
+								'demora_empleado' => $cant_minutos_demora 
+							);
+				array_push($empleados_especialidades, $emp_esp);
+
+			}
+
+
 			$this->load->view("index.php", 
 						array(
 							"header" => 'header_unlogged.php',
@@ -107,11 +161,22 @@ class Turnos extends CI_Controller {
 							"clientes" => $clientes,
 							"empleados" => $empleados,
 							"especialidades" => $especialidades,
-							"empleados_especialidades" => $empleados_especialidades));
+							"empleados_especialidades" => $empleados_especialidades_bd,
+							"demora_empleado" => $empleados_especialidades));
 
 		}else{
 				redirect('login');
 		}							
+	}
+	function getDemoraEmpleado($emp_serv_demora, $id_usuario){
+		$cant_minutos_demora = 0;
+		foreach ($emp_serv_demora as $esd) {
+			//var_dump($esd);
+			if($esd['id_empleado'] == $id_usuario){
+				$cant_minutos_demora = $esd['demora_min'];
+			}
+		}
+		return $cant_minutos_demora;
 	}
 	function menuCliente(){
 		$this->load->view("index.php", 
@@ -139,36 +204,8 @@ class Turnos extends CI_Controller {
 					$this->turnosCRUD->altaTurno($id_cliente, $id_empleado,$id_servicio, $id_estado_turno);
 				}
 			}
-			/*
-					if ($this->form_validation->run() == FALSE)
-					{
-						$this->alta();
-					}
-					else
-					{
-
-					}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-					$id_cliente = $_POST['id_cliente'];
-					$id_empleado = $_POST['id_empleado'];
-					$id_servicio = $_POST['id_servicio'];
-					$id_estado_turno = $_POST['id_estado_turno'];
-					$this->turnosCRUD->altaTurno($id_cliente, $id_empleado,$id_servicio, $id_estado_turno);*/
-					$this->panel();
+			
+			$this->panel();
 		}if($this->session->userdata('id_rol_usuario') == 3){
 
 			foreach ($_POST['especialidades'] as $id_especialidad) {

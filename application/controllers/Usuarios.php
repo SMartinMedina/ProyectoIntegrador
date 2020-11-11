@@ -106,7 +106,13 @@ class Usuarios extends CI_Controller {
 					$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
 					//$this->usuariosEspecialidadesCRUD->altaUsuarioEspecialidad($id_nuevo_empleado, $id_especialidad);
 					foreach ($_POST['especialidades'] as $id_especialidad) {
-						$this->usuariosEspecialidadesCRUD->altaUsuarioEspecialidad($id_nuevo_usuario, $id_especialidad);
+						$namefield_demora_min = "demora_min_".$id_especialidad;
+						if(isset($_POST[$namefield_demora_min]) && (!empty($_POST[$namefield_demora_min]))){
+							$demora_min = $_POST[$namefield_demora_min];
+						}else{
+							$demora_min = 20;
+						}
+						$this->usuariosEspecialidadesCRUD->altaUsuarioEspecialidad($id_nuevo_usuario, $id_especialidad,$demora_min);
 					}
 				}
 
@@ -208,7 +214,7 @@ class Usuarios extends CI_Controller {
 			$especialidades_empleado = array();//$this->usuariosEspecialidadesCRUD->getEspecialidadesEmpleado($usuario->id);
 			if($usuario->id_rol == 2){ //si es empleado busco las especialidades del mismo
 				$especialidades_empleado = $this->usuariosEspecialidadesCRUD->getEspecialidadesEmpleado($usuario->id);
-			} 
+			}
 			$this->load->view("index.php", 
 									array(
 									"header" => 'header_unlogged.php',
@@ -293,10 +299,10 @@ class Usuarios extends CI_Controller {
 	public function perfilbd(){
 		$se=$this->session->userdata('id_rol_usuario');
 		if(isset($se)){
-			$this->form_validation->set_rules('nombre', 'Nombre', 'required|min_length[8]|max_length[50]',
+			$this->form_validation->set_rules('nombre', 'Nombre', 'required|min_length[3]|max_length[50]',
 										array(
 											'required' => 'Debe ingresar un %s.',
-											'min_length' => 'El %s debe contar con 8 caracteres como mínimo.',
+											'min_length' => 'El %s debe contar con 3 caracteres como mínimo.',
 											'max_length' => 'El %s debe contar con 50 caracteres como máximo.'
 										));
 			$this->form_validation->set_rules('apellido', 'Apellido', 'max_length[50]',

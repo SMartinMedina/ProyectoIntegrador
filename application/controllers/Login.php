@@ -129,7 +129,7 @@ class Login extends CI_Controller {
 	public function trySignup()
 	{
 	
-		$this->form_validation->set_rules('nombre', 'Nombre', 'min_length[8]|max_length[50]',array('min_length'=>'El %s debe tener un minimo de 8 caracteres',
+		$this->form_validation->set_rules('nombre', 'Nombre', 'min_length[3]|max_length[50]',array('min_length'=>'El %s debe tener un minimo de 3 caracteres',
 											'max_length' => 'El %s puede contar con 50 caracteres como máximo.'));
 		$this->form_validation->set_rules('apellido', 'Apellido', 'max_length[50]',
 												array(
