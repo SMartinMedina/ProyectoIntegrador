@@ -60,11 +60,6 @@
 												</div>
 												<input 
 														type="hidden" 
-														name="email"	
-														value="<?php echo $email; ?>" 
-														required>
-												<input 
-														type="hidden" 
 														name="passv"	
 														value="<?php echo $pass; ?>" 
 														required>

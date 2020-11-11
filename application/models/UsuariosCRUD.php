@@ -172,19 +172,85 @@
 								where 
 									id = '.$id_usuario.';');
 		}    
-		function recoverUsuario($password,$pass,$email){
-			$q = $this->db->query('update usuarios set 
-										password= md5("'.$password.'")
+		function recoverUsuario($password,$pass){
+			$q = $this->db->query('update usuarios,pedidos_reset_pass set 
+										usuarios.password= md5("'.$password.'"),
+										pedidos_reset_pass.renovado=1,
+										pedidos_reset_pass.estado=1
 								where 
-									password = md5("'.$pass.'")
+									usuarios.id=pedidos_reset_pass.id_usuario
 								and
-									usuario="'.$email.'"');
+									pedidos_reset_pass.pass_temp = md5("'.$pass.'")
+								and
+									pedidos_reset_pass.renovado =0');
 		}
 		function cambiarPass($password,$id){
 			$q = $this->db->query('update usuarios set 
 										password= md5("'.$password.'")
 								where 
 									id='.$id);
-		}	    
+		}
+		function checkResets($id){
+			$q = $this->db->query('update pedidos_reset_pass set 
+										renovado=1,
+										estado=1
+								where 
+									id_usuario='.$id.'
+								and
+									renovado=0');
+		}
+		function searchReset($pass){
+			$q = $this->db->query('select 
+										*
+									from
+										pedidos_reset_pass
+									where 
+										pass_temp=md5("'.$pass.'")
+									and
+										renovado=0');
+			return $q->result();
+		}
+		function resetUsuario($id,$pass){
+			$q = $this->db->query('insert into pedidos_reset_pass(
+				id_usuario,
+				pass_temp,
+				renovado,
+				estado,
+				fecha_alta) 
+			values (
+				'.$id.',
+				md5("'.$pass.'"),
+				0,
+				0,
+				SYSDATE()
+			)');
+			return $this->db->insert_id();
+		}	
+		function getEmpleadoshabiles(){
+	    	$q = $this->db->query('select 
+										usuarios.id,
+										usuarios.id_rol,
+										roles.nombre as nombre_rol,
+										usuarios.nombre as nombre_usuario,
+										usuarios.apellido as apellido_usuario,
+										usuarios.usuario,
+										usuarios.password as pass,
+										usuarios.email as email
+									from
+										usuarios
+									inner join
+										roles
+									on
+										usuarios.id_rol = roles.id
+									inner join
+										disponibilidad_empleados
+									on
+										usuarios.id = disponibilidad_empleados.id_usuario
+									where
+										usuarios.id_rol = 2
+									and
+										usuarios.fecha_baja is null;');
+	    	return $q->result();
+	    }	    
 	}	    	    	    
 ?>

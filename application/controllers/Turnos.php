@@ -32,14 +32,6 @@ class Turnos extends CI_Controller {
 										"main" => 'turnos/control.php',
 										"footer" => 'footer_unlogged.php',
 										"turnos" => $turnos));
-										
-		}elseif($this->session->userdata('id_rol_usuario') == 3){
-			$this->load->view("index.php", 
-									array(
-										"header" => 'header_unlogged.php',
-										"main" => 'clientes/inicio.php',
-										"footer" => 'footer_unlogged.php',
-										"turnos" => $turnos ));
 		}elseif($this->session->userdata('id_rol_usuario') == 4){
 			$empleados = $this->usuariosCRUD->getEmpleados();
 			$id_empleado=0;
@@ -47,7 +39,7 @@ class Turnos extends CI_Controller {
 				$id_empleado=$_POST['empleado'];
 				$turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
 			}else{
-				$turnos = $this->turnosCRUD->getTurnos();
+				$turnos = $this->turnosCRUD->getTurnosEmpleados();
 			}
 			$this->load->view("index.php", 
 				array(
@@ -281,5 +273,13 @@ class Turnos extends CI_Controller {
 		}else{
 			redirect('login');
 		}		
-	}					
+	}	
+	public function cancelar($id_turno){
+		if($this->session->userdata('id_rol_usuario') == 3){
+			$this->turnosCRUD->cancelarTurno($id_turno);
+			$this->panelTurnosPorCliente();
+		}else{
+			redirect('login');
+		}		
+	}						
 }
