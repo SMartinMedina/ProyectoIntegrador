@@ -224,18 +224,13 @@ class Login extends CI_Controller {
 				$this->usuariosCRUD->checkResets($u->id);
 				$this->usuariosCRUD->resetUsuario($u->id,$pass);
 			}
-			//mail
-			/*	$this->load->view("index.php", 
-								array(
-									"header" => 'header_unlogged.php',
-									"main" => 'login/recover.php',
-									"footer" => 'footer_unlogged.php',
-									"pass"=>$pass));*/ 
-			$url=site_url('Login/recover').'/'.$pass;
-			$body="<div><p> Si desea cambiar <a href('".$url."')> haga aqui</a></p>					
-			</div>";
-			$this->load->library('Email');
-			$this->Email->enviar($body,$email);
+			$mensaje = "Test: ".$pass;
+//				var_dump($mensaje);
+			$this->email->from('no-reply@lastit.com', 'LastIt.com');
+			$this->email->to($email);
+			$this->email->subject('Reseteo de la Contraseña');
+			$this->email->message($mensaje);
+			$this->email->send();
 			$this->load->view("index.php", 
 								array(
 									"header" => 'header_unlogged.php',
