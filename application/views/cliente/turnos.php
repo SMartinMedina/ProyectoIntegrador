@@ -91,6 +91,20 @@
 															echo $t->nombre_empleado;
 														?>
 													</td>
+													<td id="boton".<?php
+															echo $t->id_turno;
+														?>>
+														<?php
+															//BOTONES DE EDICION
+															$seccionUrl = "Turnos"; 
+															$this->load->view("turnos/opciones_edicion_abm.php", 
+																			array(
+																				"seccion" => $seccionUrl,
+																				"id" => $t->id_turno,
+																			)
+																		);
+														?>
+													</td>
 												  </tr>
 										  <?php
 											  }

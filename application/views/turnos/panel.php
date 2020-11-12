@@ -123,7 +123,16 @@
 															
 														<?php
 																echo $t->nombre_estado_turno;
-														?>																
+														?>
+															</span>
+														<?php
+															}else if( $t->id_estado_turno == 4){
+														?>
+															<span class="label label-success">
+															
+														<?php
+																echo $t->nombre_estado_turno;
+														?>																			
 															</span>
 														<?php
 															}

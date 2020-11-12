@@ -19,6 +19,14 @@ class Usuarios extends CI_Controller {
 									"main" => 'usuarios/panel.php',
 									"footer" => 'footer_unlogged.php',
 									"usuarios" => $usuarios ));
+		}else if($this->session->userdata('id_rol_usuario') == 4){
+			$empleados = $this->usuariosCRUD->getEmpleadosdiponibilidad();
+			$this->load->view("index.php", 
+								array(
+									"header" => 'header_unlogged.php',
+									"main" => 'empleados/habitaremp.php',
+									"footer" => 'footer_unlogged.php',
+									"empleados" => $empleados ));
 		}else{
 			redirect('login');
 		}	
@@ -160,6 +168,7 @@ class Usuarios extends CI_Controller {
 				$email = $_POST['email'];
 
 				$id_nuevo_empleado = $this->usuariosCRUD->altaUsuario($id_rol,$nombre,$apellido, $usuario, $password, $email);
+				$this->usuariosCRUD->altaDisponibilidadEmpleado($id_nuevo_empleado);
 				$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
 				//$this->usuariosEspecialidadesCRUD->altaUsuarioEspecialidad($id_nuevo_empleado, $id_especialidad);
 				foreach ($_POST['especialidades'] as $id_especialidad) {
@@ -371,7 +380,23 @@ class Usuarios extends CI_Controller {
 						
 					}
 	}
-
+	public function disponibilidad($e){
+			$this->usuariosCRUD->disponibilidadbd($e,1);
+			$this->panel();
+	}
+	public function noDisponibilidad($e){
+		$this->usuariosCRUD->disponibilidadbd($e,0);
+		$this->panel();
+	}
+	public function disponiblesTodos(){
+			$this->usuariosCRUD->disponibilidadTodosbd();
+		
+			$this->panel();
+	}
+	public function noDisponiblesTodos(){
+		$this->usuariosCRUD->noDisponibilidadTodosbd();
+		$this->panel();
+	}
 }
 	
 

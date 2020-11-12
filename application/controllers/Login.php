@@ -57,22 +57,22 @@ class Login extends CI_Controller {
 							"empleados_especialidades" => $empleados_especialidades));
 
 		}elseif($this->session->userdata('id_rol_usuario') == 4){
-							$empleados = $this->usuariosCRUD->getEmpleados();
-							$id_empleado=0;
-							if((isset($_POST['empleado']))&&($_POST['empleado']!=0)){
-								$id_empleado=$_POST['empleado'];
-								$turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
-							}else{
-								$turnos = $this->turnosCRUD->getTurnos();
-							}
-							$this->load->view("index.php", 
-								array(
-								"header" => 'header_unlogged.php',
-								"main" => 'turnos/controla.php',
-								"footer" => 'footer_unlogged.php',
-								"turnos" => $turnos, 
-								"empleados" => $empleados,
-								"id_empleado"=> $id_empleado));							
+			$empleados = $this->usuariosCRUD->getEmpleadosdiponibilidad();
+			$id_empleado=0;
+			if((isset($_POST['empleado']))&&($_POST['empleado']!=0)){
+				$id_empleado=$_POST['empleado'];
+				$turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
+			}else{
+				$turnos = $this->turnosCRUD->getTurnosEmpleados();
+			}
+			$this->load->view("index.php", 
+				array(
+				"header" => 'header_unlogged.php',
+				"main" => 'turnos/controla.php',
+				"footer" => 'footer_unlogged.php',
+				"turnos" => $turnos, 
+				"empleados" => $empleados,
+				"id_empleado"=> $id_empleado));							
 		}else{
 							redirect('login');
 		}		
@@ -221,29 +221,36 @@ class Login extends CI_Controller {
 			$usuario = $this->usuariosCRUD->getEmail($email);
 			$pass=$this->getPassTemp();
 			foreach($usuario as $u){
-				$this->usuariosCRUD->updateUsuario($u->id,$u->nombre_usuario,$u->apellido_usuario,$pass,$email);
+				$this->usuariosCRUD->checkResets($u->id);
+				$this->usuariosCRUD->resetUsuario($u->id,$pass);
 			}
-			$this->recover($email,$pass);
+			//mail
+			/*	$this->load->view("index.php", 
+								array(
+									"header" => 'header_unlogged.php',
+									"main" => 'login/recover.php',
+									"footer" => 'footer_unlogged.php',
+									"pass"=>$pass));*/ 
+			$this->recover($pass);
 		}
 	}
-	public function recover($email,$pass){
+	public function recover($passt){
+		$reset=$this->usuariosCRUD->searchReset($passt);
+		if(sizeof($reset)==1){
 
-		if(isset($email)){
 			$this->load->view("index.php", 
 								array(
 									"header" => 'header_unlogged.php',
 									"main" => 'login/recover.php',
 									"footer" => 'footer_unlogged.php',
-									"pass"=>$pass,
-									"email"=>$email));
+									"passt"=>$passt));
 		}else{
 			$this->index();
 		}
 	}
 	public function tryrecover(){
-		$email=$_POST['email'];
-		$pass=$_POST['passv'];
-		if(isset($email)){
+		$passt=$_POST['passt'];
+		if(isset($passt)){
 			$this->form_validation->set_rules('pass', 'Pass', 'required|min_length[8]',
 				array('required' => 'Debe ingresar su %s.',
 						'min_length'=>'Su %s debe tener 8 caracteres por lo minimo.'));	
@@ -255,10 +262,12 @@ class Login extends CI_Controller {
 			
 			if ($this->form_validation->run() == FALSE)
 			{
-				$this->recover($email,$pass);
+				$this->recover($pass);
 			}else{
 				$password=$_POST['pass'];
-				$this->usuariosCRUD->recoverUsuario($password,$pass,$email);
+				$id=$this->usuariosCRUD->recoverUsuario($passt);
+				$this->usuariosCRUD->cambiarPass($password,$id->id_usuario);
+				$this->usuariosCRUD->desactivarpass($passt);
 				$this->index();
 			}
 		}else{

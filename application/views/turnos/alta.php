@@ -130,26 +130,27 @@
 		$flag = 0;
 		foreach ($empleados_especialidades as $ee) {
 			if($ee->id_especialidad == $e->id){
-				$cantEspecialistas++;
-				$chkId = "servicioEmp-".$e->id."-".$ee->id_usuario;
-				$chkName = $chkId;
+				
+						$cantEspecialistas++;
+						$chkId = "servicioEmp-".$e->id."-".$ee->id_usuario;
+						$chkName = $chkId;
 
-				/**/
-				foreach ($demora_empleado as $de) {
-					if($de['id_usuario'] == $ee->id_usuario){
-						$demoraEmpleadoEnMin =  "(".$de['demora_empleado']."min de Espera)";
-						if($flag == 0){
-							$min_demora = intVal($de['demora_empleado']);
-							$flag = 1;
+						/**/
+						foreach ($demora_empleado as $de) {
+							if($de['id_usuario'] == $ee->id_usuario){
+								$demoraEmpleadoEnMin =  "(".$de['demora_empleado']."min de Espera)";
+								if($flag == 0){
+									$min_demora = intVal($de['demora_empleado']);
+									$flag = 1;
+								}
+								if($min_demora > intVal($de['demora_empleado'])){
+									$selected = "selected = 'selected'";
+									$min_demora = intVal($de['demora_empleado']);
+								}else{
+									$selected = "";
+								}
+							}
 						}
-						if($min_demora > intVal($de['demora_empleado'])){
-							$selected = "selected = 'selected'";
-							$min_demora = intVal($de['demora_empleado']);
-						}else{
-							$selected = "";
-						}
-					}
-				}
 
 ?>
 													<option value="<?php echo $ee->id_usuario; ?>" 
@@ -158,7 +159,7 @@
 																											
 													</option>
 <?php
-				
+					
 			}
 		}
 ?>
