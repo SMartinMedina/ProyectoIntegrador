@@ -57,7 +57,7 @@ class Login extends CI_Controller {
 							"empleados_especialidades" => $empleados_especialidades));
 
 		}elseif($this->session->userdata('id_rol_usuario') == 4){
-			$empleados = $this->usuariosCRUD->getEmpleados();
+			$empleados = $this->usuariosCRUD->getEmpleadosdiponibilidad();
 			$id_empleado=0;
 			if((isset($_POST['empleado']))&&($_POST['empleado']!=0)){
 				$id_empleado=$_POST['empleado'];
@@ -72,7 +72,7 @@ class Login extends CI_Controller {
 				"footer" => 'footer_unlogged.php',
 				"turnos" => $turnos, 
 				"empleados" => $empleados,
-				"id_empleado"=> $id_empleado));					
+				"id_empleado"=> $id_empleado));							
 		}else{
 							redirect('login');
 		}		
@@ -224,25 +224,33 @@ class Login extends CI_Controller {
 				$this->usuariosCRUD->checkResets($u->id);
 				$this->usuariosCRUD->resetUsuario($u->id,$pass);
 			}
+			//mail
+			/*	$this->load->view("index.php", 
+								array(
+									"header" => 'header_unlogged.php',
+									"main" => 'login/recover.php',
+									"footer" => 'footer_unlogged.php',
+									"pass"=>$pass));*/ 
 			$this->recover($pass);
 		}
 	}
-	public function recover($pass){
-		$reset=$this->usuariosCRUD->searchReset($pass);
+	public function recover($passt){
+		$reset=$this->usuariosCRUD->searchReset($passt);
 		if(sizeof($reset)==1){
+
 			$this->load->view("index.php", 
 								array(
 									"header" => 'header_unlogged.php',
 									"main" => 'login/recover.php',
 									"footer" => 'footer_unlogged.php',
-									"pass"=>$pass));
+									"passt"=>$passt));
 		}else{
 			$this->index();
 		}
 	}
 	public function tryrecover(){
-		$pass=$_POST['passv'];
-		if(isset($pass)){
+		$passt=$_POST['passt'];
+		if(isset($passt)){
 			$this->form_validation->set_rules('pass', 'Pass', 'required|min_length[8]',
 				array('required' => 'Debe ingresar su %s.',
 						'min_length'=>'Su %s debe tener 8 caracteres por lo minimo.'));	
@@ -257,7 +265,9 @@ class Login extends CI_Controller {
 				$this->recover($pass);
 			}else{
 				$password=$_POST['pass'];
-				$this->usuariosCRUD->recoverUsuario($password,$pass);
+				$id=$this->usuariosCRUD->recoverUsuario($passt);
+				$this->usuariosCRUD->cambiarPass($password,$id->id_usuario);
+				$this->usuariosCRUD->desactivarpass($passt);
 				$this->index();
 			}
 		}else{

@@ -60,8 +60,8 @@
 												</div>
 												<input 
 														type="hidden" 
-														name="passv"	
-														value="<?php echo $pass; ?>" 
+														name="passt"	
+														value="<?php echo $passt; ?>" 
 														required>
 												<!--<div class="form-group">
 													<div class="checkbox checkbox-primary pr-10 pull-left">

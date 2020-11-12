@@ -99,19 +99,6 @@
 														>
 												</div>
 												<div class="form-group">
-													<label class="control-label mb-10" for="id_rol">rol:</label>
-													<h5>Empleado</h5>
-													<!-- ID_ROL (empleado) = 2-->
-													<input 
-														type="hidden" 
-														class="form-control" 
-														id="id_rol" 
-														name="id_rol"	
-														value="2" 
-														>
-
-												</div>
-												<div class="form-group">
 													<label class="control-label mb-10" for="email">
 														Correo Electrónico:
 													</label>
@@ -126,6 +113,20 @@
 														required
 														>
 												</div>
+												<div class="form-group">
+													<label class="control-label mb-10" for="id_rol">rol:</label>
+													<h5>Empleado</h5>
+													<!-- ID_ROL (empleado) = 2-->
+													<input 
+														type="hidden" 
+														class="form-control" 
+														id="id_rol" 
+														name="id_rol"	
+														value="2" 
+														>
+
+												</div>
+												
 												<div class="form-group">
 													<label class="control-label mb-10" for="email">
 														Especialidades:
