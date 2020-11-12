@@ -231,7 +231,17 @@ class Login extends CI_Controller {
 									"main" => 'login/recover.php',
 									"footer" => 'footer_unlogged.php',
 									"pass"=>$pass));*/ 
-			$this->recover($pass);
+			$url=site_url('Login/recover').'/'.$pass;
+			$body="<div><p> Si desea cambiar <a href('".$url."')> haga aqui</a></p>					
+			</div>";
+			$this->load->library('Email');
+			$this->Email->enviar($body,$email);
+			$this->load->view("index.php", 
+								array(
+									"header" => 'header_unlogged.php',
+									"main" => 'login/respuesta.php',
+									"footer" => 'footer_unlogged.php'));
+			//$this->recover($pass);
 		}
 	}
 	public function recover($passt){
