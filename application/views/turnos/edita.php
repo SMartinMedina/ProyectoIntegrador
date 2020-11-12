@@ -131,13 +131,13 @@
 		$tagId = "servicio_".$e->id;
 		$tagName = $tagId;
 ?>
-												<div class="form-group" id = "<?php echo $tagDivId; ?>" 
+												<div class="form-group sel_empleados" id = "<?php echo $tagDivId; ?>" 
 													style="display: none;">
 													<label class="control-label mb-10" for="email">
 														<?php echo $e->nombre." - Seleccione Empleado: "; ?>
 													</label>
 
-													<select class="form-control" id="sel_<?php echo $tagId; ?>" 
+													<select class="form-control " id="sel_<?php echo $tagId; ?>" 
 															name ="sel_<?php echo $tagName; ?>" 
 															>
 <?php
@@ -227,12 +227,11 @@
 	<script type="text/javascript">
 		function listaServicios(select){
 			//alert(check.value);
+			$(".sel_empleados").hide();
 			if(select.value){
-				alert("Quedó checkeado");
 				//$("#div_servicio_"+select.value).show(); 
 				//CANTIDAD: alert($("#cant-esp-"+check.value).val());
 				if( $("#cant-esp-"+select.value).val() > 0){
-							    		alert("CantEsp OK");
 					$("#div_servicio_"+select.value).show(); //MUESTRO EL DESPLEGABLE DE ESPECIALISTAS SI EXISTEN
 				}
 			}else{
@@ -244,7 +243,7 @@
 		    //$('#div_especialidades_empleado').hide(); 
 		    $().ready(function(){
 		    	var especialidad = $('#sel_especialidades_empleado').val(); 
-		    			    	alert($("#cant-esp-"+especialidad).val() );
+
 		    	if( $("#cant-esp-"+especialidad).val() > 0){
 					$("#div_servicio_"+especialidad).show(); //MUESTRO EL DESPLEGABLE DE ESPECIALISTAS SI EXISTEN
 				}

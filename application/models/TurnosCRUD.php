@@ -213,12 +213,21 @@
 	    function bajaTurno($id_turno){
 	    	$q = $this->db->query('update turnos set fecha_baja = SYSDATE() where id = '.$id_turno);
 	    }	    	    
-	    function editaTurno($id_turno,$id_estado_turno){
+	    function editaTurno($id_turno,$id_cliente, $id_especialidad, $id_empleado){
+	    	$q = $this->db->query('update turnos set 
+	    								id_cliente = '.$id_cliente.',
+	    								id_especialidad = '.$id_especialidad.',
+	    								id_empleado = '.$id_empleado.'
+    								where 
+    									id = '.$id_turno);
+		}	
+	    function inicializaTurno($id_turno,$id_estado_turno){
 	    	$q = $this->db->query('update turnos set 
 	    								id_estado_turno = '.$id_estado_turno.'
     								where 
     									id = '.$id_turno);
-		}	
+		}			
+		
 		function cancelarTurno($id_turno){
 	    	$q = $this->db->query('update turnos set id_estado_turno=3 where id = '.$id_turno);
 		}

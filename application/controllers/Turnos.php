@@ -296,10 +296,12 @@ class Turnos extends CI_Controller {
 	public function editabd(){
 		if($this->session->userdata('id_rol_usuario') == 1){
 			$id_turno = $_POST['id_turno'];
-			//$id_cliente = $_POST['id_cliente'];
-			//$id_empleado = $_POST['id_empleado'];
-			$id_estado_turno = $_POST['id_estado_turno'];
-			$this->turnosCRUD->editaTurno($id_turno,$id_estado_turno);
+			$id_cliente = $_POST['id_cliente'];
+			$id_especialidad = $_POST['id_especialidad'];
+			$nombreCampoEmpleado = "sel_servicio_".$id_especialidad;
+			$id_empleado = $_POST[$nombreCampoEmpleado];
+			//$id_estado_turno = $_POST['id_estado_turno'];
+			$this->turnosCRUD->editaTurno($id_turno,$id_cliente, $id_especialidad, $id_empleado);
 			$this->panel();
 		}else{
 			redirect('login');
@@ -307,7 +309,7 @@ class Turnos extends CI_Controller {
 	}
 	public function inicializar($id_turno){
 		if($this->session->userdata('id_rol_usuario') == 2){
-			$turno = $this->turnosCRUD->editaTurno($id_turno,2);
+			$turno = $this->turnosCRUD->inicializaTurno($id_turno,2);
 			$this->panel();
 		}else{
 			redirect('login');
