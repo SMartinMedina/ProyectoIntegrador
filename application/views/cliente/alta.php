@@ -112,31 +112,32 @@ $this->load->view("general/menu_lateral.php");
 		$cantEspecialistas = 0;
 		foreach ($empleados_especialidades as $ee) {
 			if($ee->id_especialidad == $e->id){
-				$cantEspecialistas++;
-				$chkId = "servicioEmp-".$e->id."-".$ee->id_usuario;
-				$chkName = $chkId;
-				/**/
-				foreach ($demora_empleado as $de) {
-					if($de['id_usuario'] == $ee->id_usuario){
-						$demoraEmpleadoEnMin =  "(".$de['demora_empleado']."min de Espera)";
-						if($flag == 0){
-							$min_demora = intVal($de['demora_empleado']);
-							$flag = 1;
+						$cantEspecialistas++;
+						$chkId = "servicioEmp-".$e->id."-".$ee->id_usuario;
+						$chkName = $chkId;
+						/**/
+						foreach ($demora_empleado as $de) {
+							if($de['id_usuario'] == $ee->id_usuario){
+								$demoraEmpleadoEnMin =  "(".$de['demora_empleado']."min de Espera)";
+								if($flag == 0){
+									$min_demora = intVal($de['demora_empleado']);
+									$flag = 1;
+								}
+								if($min_demora > intVal($de['demora_empleado'])){
+									$selected = "selected = 'selected'";
+									$min_demora = intVal($de['demora_empleado']);
+								}else{
+									$selected = "";
+								}
+							}
 						}
-						if($min_demora > intVal($de['demora_empleado'])){
-							$selected = "selected = 'selected'";
-							$min_demora = intVal($de['demora_empleado']);
-						}else{
-							$selected = "";
-						}
-					}
-				}
 ?>
 														<option value="<?php echo $e->id.'-'.$ee->id_usuario; ?>"
 															<?php echo $selected;?>>
 														<?php echo $ee->nombre_empleado." ".$demoraEmpleadoEnMin; ?>
 														</option>
 <?php
+					
 				
 			}
 		}
@@ -201,7 +202,7 @@ $this->load->view("general/menu_lateral.php");
 
 									<?php
 										echo anchor(
-											'turnos/alta',	//'controller/function/uri', 
+											'turnos/menuCliente',	//'controller/function/uri', 
 											'Volver al inicio',		//'Link', 
 											'class=""'); 
 ?>

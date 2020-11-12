@@ -63,9 +63,9 @@
 									</form>
 								
 									<!--<p class="text-muted">Add class <code>table</code> in table tag.</p>-->
-									<?php
-										if(sizeof($turnos)>0){
-									?><div class="table-wrap mt-40">
+									
+									
+									<div class="table-wrap mt-40">
 										<div class="table-responsive">
 											<table class="table mb-0">
 												<thead>
@@ -142,9 +142,6 @@
 											</table>
 										</div>
 									</div>
-									<?php
-										}
-									?>
 								</div>
 							</div>
 						</div>

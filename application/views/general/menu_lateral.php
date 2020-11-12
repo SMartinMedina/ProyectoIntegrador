@@ -70,9 +70,6 @@
 																"icon" => " zmdi-book ",
 																"active" => $estadosTurnosActive ));
 
-?>
-				
-<?php
 		}else if($this->session->userdata('id_rol_usuario') == 2){
 			$urlParts = explode("/", $main);
 			$seccionUrl = $urlParts[0]; 
@@ -95,10 +92,14 @@
 			$urlParts = explode("/", $main);
 			$seccionUrl = $urlParts[0]; 
 			$lista = "";
+			$especialistas="";
 			switch ($seccionUrl) {
 				case 'turnos':
 					$lista = "'active'";
-					break;							
+					break;
+				/*case 'usuarios'
+					$especialistas="'active'";
+					break;*/
 				default:
 					
 					break;
@@ -108,6 +109,11 @@
 																"seccion" => "Lista de turnos de especialistas",
 																"icon" => " zmdi-book ",
 																"active" => $lista ));
+			$this->load->view('general/boton_menu_lateral.php', array(
+																	"seccionUrl" => "usuarios",
+																	"seccion" => "Lista de especialistas",
+																	"icon" => " zmdi-book ",
+																	"active" => $especialistas ));													
 
 		}
 ?>					
