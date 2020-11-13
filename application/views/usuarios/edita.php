@@ -175,11 +175,13 @@
 						
 <?php
 			$style="padding-left: 20px; display: none;";
+			$value="";
 			$especialidadHabilitada = false;
 			foreach ($especialidadesEmpleado as $ee) {
 				if($e->id == $ee->id_especialidad && $especialidadHabilitada == false) {
 					$especialidadHabilitada = true;
 					$style="padding-left: 20px; display: block;";
+					$value=$ee->demora_min;
 ?>
 		
 <?php
@@ -187,7 +189,7 @@
 			}
 ?>
 			style = "<?php echo $style; ?>"
-			value = "<?php echo $ee->demora_min; ?>"
+			value = "<?php echo $value; ?>"
 
 			/>
 	</div>

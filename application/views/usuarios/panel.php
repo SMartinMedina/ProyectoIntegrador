@@ -84,6 +84,7 @@
 												<tbody>
 											<?php
 												foreach($usuarios as $u){
+													if($u->id_rol != 1){
 											?>
 											  	<tr>
 													<td>
@@ -126,6 +127,7 @@
 													</td>
 												  </tr>
 										  <?php
+										  		}
 											  }
 										  ?>
 												</tbody>
