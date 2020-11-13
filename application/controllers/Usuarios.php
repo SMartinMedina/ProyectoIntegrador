@@ -113,6 +113,7 @@ class Usuarios extends CI_Controller {
 				if($id_rol == "2"){ //SI ES EMPLEADO DOY DE ALTA LAS ESPECIALIDADES SELECCIONADAS
 					$this->usuariosCRUD->altaDisponibilidadEmpleado($id_nuevo_usuario);
 					$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
+					$this->usuariosCRUD->altaDisponibilidadEmpleado($id_nuevo_empleado);
 					//$this->usuariosEspecialidadesCRUD->altaUsuarioEspecialidad($id_nuevo_empleado, $id_especialidad);
 					foreach ($_POST['especialidades'] as $id_especialidad) {
 						$namefield_demora_min = "demora_min_".$id_especialidad;

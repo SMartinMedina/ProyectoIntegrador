@@ -148,6 +148,14 @@ class Login extends CI_Controller {
 			$pass = $this->input->post('pass');//$pass = $_POST['pass'];
 			$usuario = $this->usuariosCRUD->altaUsuario(3,$nombre,$apellido,$email,$pass,$email);//id=3 es de cliente
 			//$this->mandar_Mail();
+			$url=site_url('Login/index');
+			$mensaje="<!DOCTYPE html><html lang='es'><body><div><p> Su cuenta ha sido creada con exito. Si desea iniciar sesion <a href='".$url."'> haga aqui</a></p></body></html>";
+//				var_dump($mensaje);
+			$this->email->from('no-reply@lastit.com', 'LastIt.com');
+			$this->email->to($email);
+			$this->email->subject('Cuenta creada');
+			$this->email->message($mensaje);
+			$this->email->send();
 			$this->index();
 		}
 	}	
