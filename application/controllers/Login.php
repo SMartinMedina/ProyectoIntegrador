@@ -216,7 +216,8 @@ class Login extends CI_Controller {
 				$this->usuariosCRUD->checkResets($u->id);
 				$this->usuariosCRUD->resetUsuario($u->id,$pass);
 			}
-			$mensaje = "Test: ".$pass;
+			$url=site_url('Login/recover').'/'.$pass;
+			$mensaje="<!DOCTYPE html><html lang='es'><body><div><p> Si desea cambiar <a href='".$url."'> haga aqui</a></p></body></html>";
 //				var_dump($mensaje);
 			$this->email->from('no-reply@lastit.com', 'LastIt.com');
 			$this->email->to($email);
