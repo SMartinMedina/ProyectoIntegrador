@@ -13,8 +13,6 @@ class Turnos extends CI_Controller {
 	public function panel(){
 		if($this->session->userdata('id_rol_usuario') == 1){
 			$turnos = $this->turnosCRUD->getTurnos();
-			/*$data
-			$this->load->view(array('login/login.php');*/
 			$this->load->view("index.php", 
 									array(
 										"header" => 'header_unlogged.php',
@@ -71,7 +69,7 @@ class Turnos extends CI_Controller {
 			//$roles = "";
 			$clientes = $this->usuariosCRUD->getClientes();
 			$empleados = $this->usuariosCRUD->getEmpleadosHabiles();
-			$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
+			$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidadesDisponibles();
 			$empleados_especialidades_bd = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidadesHabiles();
 			$empleados_especialidades = array();
 
@@ -114,7 +112,7 @@ class Turnos extends CI_Controller {
 		}else if($this->session->userdata('id_rol_usuario') == 3){
 			$clientes = $this->usuariosCRUD->getClientes();
 			$empleados = $this->usuariosCRUD->getEmpleadosHabiles();
-			$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
+			$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidadesDisponibles();
 			$empleados_especialidades_bd = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidadesHabiles();
 
 			$length=sizeof($empleados);
@@ -194,18 +192,14 @@ class Turnos extends CI_Controller {
 					$id_empleado = $_POST[$POSTEmpServicio];
 					$id_servicio = $id_especialidad;
 					$id_estado_turno = 1; //Se setea por default estado "EN ESPERA"
-					/*var_dump(" POSTEmpServicio: ".$POSTEmpServicio. 
-							" id_cliente: ".$id_cliente. 
-							" id_empleado: ".$id_empleado.
-							" id_servicio: ".$id_servicio.
-							" id_estado_turno: ".$id_estado_turno);*/
 							
-					$this->turnosCRUD->altaTurno($id_cliente, $id_empleado,$id_servicio, $id_estado_turno);
+					$id_turno = $this->turnosCRUD->altaTurno($id_cliente, $id_empleado,$id_servicio, $id_estado_turno);
+					$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,1); // 1: En Espera
 				}
 			}
 			
 			$this->panel();
-		}if($this->session->userdata('id_rol_usuario') == 3){
+		}else if($this->session->userdata('id_rol_usuario') == 3){
 
 			foreach ($_POST['especialidades'] as $id_especialidad) {
 
@@ -250,7 +244,7 @@ class Turnos extends CI_Controller {
 			$turno = $this->turnosCRUD->getTurno($id_turno);
 			$clientes = $this->usuariosCRUD->getClientes();
 			$empleados = $this->usuariosCRUD->getEmpleados();
-			$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
+			$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidadesDisponibles();
 			$empleados_especialidades_bd = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidades();
 			$empleados_especialidades = array();
 
@@ -309,7 +303,8 @@ class Turnos extends CI_Controller {
 	}
 	public function inicializar($id_turno){
 		if($this->session->userdata('id_rol_usuario') == 2){
-			$turno = $this->turnosCRUD->inicializaTurno($id_turno,2);
+			$turno = $this->turnosCRUD->avanzaTurno($id_turno,2); // 2: Siendo Atendido
+			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,2);
 			$this->panel();
 		}else{
 			redirect('login');
@@ -317,18 +312,21 @@ class Turnos extends CI_Controller {
 	}
 	public function finalizar($id_turno){
 		if($this->session->userdata('id_rol_usuario') == 2){
-			$this->turnosCRUD->bajaTurno($id_turno);
+			$turno = $this->turnosCRUD->avanzaTurno($id_turno,3); // 3: Finalizado
+			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,3);
 			$this->panel();
 		}else{
 			redirect('login');
 		}		
-	}	
+	}
+
 	public function cancelar($id_turno){
-		if($this->session->userdata('id_rol_usuario') == 3){
-			$this->turnosCRUD->cancelarTurno($id_turno);
-			$this->panelTurnosPorCliente();
+		if($this->session->userdata('id_rol_usuario') == 2){
+			$turno = $this->turnosCRUD->avanzaTurno($id_turno,4); // 4: Cancelado
+			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,4);
+			$this->panel();
 		}else{
 			redirect('login');
-		}		
-	}						
+		}	
+	}
 }

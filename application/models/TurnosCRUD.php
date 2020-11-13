@@ -209,6 +209,7 @@
 	    								'.$id_estado_turno.',
 	    								SYSDATE()
     								)');
+	    	return $this->db->insert_id();
 	    }	    
 	    function bajaTurno($id_turno){
 	    	$q = $this->db->query('update turnos set fecha_baja = SYSDATE() where id = '.$id_turno);
@@ -221,7 +222,7 @@
     								where 
     									id = '.$id_turno);
 		}	
-	    function inicializaTurno($id_turno,$id_estado_turno){
+	    function avanzaTurno($id_turno,$id_estado_turno){
 	    	$q = $this->db->query('update turnos set 
 	    								id_estado_turno = '.$id_estado_turno.'
     								where 
@@ -234,6 +235,19 @@
 		function finalizarTurno($id_turno){
 	    	$q = $this->db->query('update turnos set id_estado_turno=3 where id = '.$id_turno);
 		}
+
+		function registrarCambioEstadoTurno($id_turno, $id_estado_turno){
+			$q = $this->db->query('insert into log_turnos(
+	    								id_turno,
+	    								id_estado_turno,
+	    								fecha_hora_alta) 
+    								values (
+	    								'.$id_turno.',
+	    								'.$id_estado_turno.',
+	    								SYSDATE()
+    								)');
+		}
+
 		function getTurnosEmpleados(){
 	    	$q = $this->db->query('select 
 										turnos.id as id_turno,

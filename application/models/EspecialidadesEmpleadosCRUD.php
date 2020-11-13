@@ -18,6 +18,17 @@ class EspecialidadesEmpleadosCRUD extends CI_Model {
 	    function getEspecialidades(){
 	    	$q = $this->db->query('select 
 										especialidades_empleados.id,
+										especialidades_empleados.nombre
+									from
+										especialidades_empleados
+									where
+										especialidades_empleados.fecha_baja is null');
+	    	return $q->result();
+	    }
+
+		function getEspecialidadesDisponibles(){
+			$q = $this->db->query('select 
+										especialidades_empleados.id,
 										especialidades_empleados.nombre,
 										count(*)
 									from
@@ -33,7 +44,8 @@ class EspecialidadesEmpleadosCRUD extends CI_Model {
 									group by
 										especialidades_empleados.id');
 	    	return $q->result();
-	    }
+
+		}
         function altaEspecialidad($nombre){
                 $this->db->query('insert into especialidades_empleados(nombre) values ("'.$nombre.'")');
         }

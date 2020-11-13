@@ -1,10 +1,9 @@
 <?php
-	echo anchor(
+/*	echo anchor(
 		$seccion.'/baja/'.$id,											//'controller/function/uri', 
 		'<i class="fa fa-eye" aria-hidden="true"></i> Ver',		//'Link', 
-		''); 
+		''); */
 ?>
- | 
 <?php
 	echo anchor(
 		$seccion.'/baja/'.$id,											//'controller/function/uri', 
