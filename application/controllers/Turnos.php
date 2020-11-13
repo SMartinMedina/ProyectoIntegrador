@@ -211,13 +211,33 @@ class Turnos extends CI_Controller {
 					$id_empleado = $idservicio_idempleado_arr[1]; // 
 					$id_servicio = $id_especialidad;
 					$id_estado_turno = 1; //Se setea por default estado "EN ESPERA"
+					$email=$this->session->userdata('');
 					$this->turnosCRUD->altaTurno($id_cliente, $id_empleado,$id_servicio, $id_estado_turno);
-					$this->menuCliente();
+					$mensaje="<!DOCTYPE html><html lang='es'><body><div><p> Su turno a sido creado con exito</p>
+                    <br>
+                    <table>
+                    <thead>
+                    <tr>
+                      <th>Servicio</th>
+                      <th>Atiende</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    </table></div></body></html>";
+            //              var_dump($mensaje);
+                        $this->email->from('no-reply@lastit.com', 'LastIt.com');
+                        $this->email->to($email);
+                        $this->email->subject('Reseteo de la Contraseña');
+                        $this->email->message($mensaje);
+                        $this->email->send();
+
+					
 				}else{
 
 					// A DEFINIR
 				}
 			}
+			$this->menuCliente();
 		}else{
 			redirect('login');
 		}	
@@ -305,6 +325,28 @@ class Turnos extends CI_Controller {
 		if($this->session->userdata('id_rol_usuario') == 2){
 			$turno = $this->turnosCRUD->avanzaTurno($id_turno,2); // 2: Siendo Atendido
 			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,2);
+			$clientes=
+			foreach($clientes as $c)
+			{
+					$mensaje="<!DOCTYPE html><html lang='es'><body><div><p> Su turno a sido creado con exito</p>
+                    <br>
+                    <table>
+                    <thead>
+                    <tr>
+                      <th>Servicio</th>
+                      <th>Atiende</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    </table></div></body></html>";
+            //              var_dump($mensaje);
+                        $this->email->from('no-reply@lastit.com', 'LastIt.com');
+                        $this->email->to($email);
+                        $this->email->subject('Reseteo de la Contraseña');
+                        $this->email->message($mensaje);
+                        $this->email->send();
+
+			}
 			$this->panel();
 		}else{
 			redirect('login');
