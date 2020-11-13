@@ -78,7 +78,7 @@
 										usuarios_especialidades.id = '.$id_usuario_especialidad);
 	    	return $q->row();
 	    }
-	    function altaUsuarioEspecialidad($id_usuario, $id_especialidad){
+	    function altaUsuarioEspecialidad($id_usuario, $id_especialidad, $demora_min){
 	    	$q = $this->db->query('insert into usuarios_especialidades(
 	    								id_usuario,
 										id_especialidad,
@@ -87,7 +87,7 @@
     								values (
 	    								'.$id_usuario.',
 										'.$id_especialidad.',
-										40,
+										'.$demora_min.',
 	    								SYSDATE()
     								)');
 	    }	    

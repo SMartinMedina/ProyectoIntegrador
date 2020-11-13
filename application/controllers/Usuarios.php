@@ -111,6 +111,7 @@ class Usuarios extends CI_Controller {
 				//LIMPIO LAS ESPECIALIDADES DEL USUARIO
 				//$this->usuariosEspecialidadesCRUD->cleanEspecialidadesEmpleado($id_nuevo_usuario);
 				if($id_rol == "2"){ //SI ES EMPLEADO DOY DE ALTA LAS ESPECIALIDADES SELECCIONADAS
+					$this->usuariosCRUD->altaDisponibilidadEmpleado($id_nuevo_usuario);
 					$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
 					//$this->usuariosEspecialidadesCRUD->altaUsuarioEspecialidad($id_nuevo_empleado, $id_especialidad);
 					foreach ($_POST['especialidades'] as $id_especialidad) {
@@ -282,7 +283,13 @@ class Usuarios extends CI_Controller {
 						$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidades();
 						//$this->usuariosEspecialidadesCRUD->altaUsuarioEspecialidad($id_nuevo_empleado, $id_especialidad);
 						foreach ($_POST['especialidades'] as $id_especialidad) {
-							$this->usuariosEspecialidadesCRUD->altaUsuarioEspecialidad($id_usuario, $id_especialidad);
+							$namefield_demora_min = "demora_min_".$id_especialidad;
+							if(isset($_POST[$namefield_demora_min]) && (!empty($_POST[$namefield_demora_min]))){
+								$demora_min = $_POST[$namefield_demora_min];
+							}else{
+								$demora_min = 20;
+							}
+							$this->usuariosEspecialidadesCRUD->altaUsuarioEspecialidad($id_usuario, $id_especialidad,$demora_min);
 						}
 					}
 

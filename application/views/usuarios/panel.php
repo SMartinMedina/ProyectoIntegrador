@@ -57,10 +57,6 @@
 											"<button class='btn btn-success'>Alta de Usuario</button>",		//'Link', 
 											'class=""'); 
 
-										echo anchor(
-											'usuarios/altaEmpleado',	//'controller/function/uri', 
-											"<button class='btn btn-success'>Alta de Empleado</button>",		//'Link', 
-											'class=""'); 
 /*
 										echo anchor(
 											'usuarios/altaCliente',	//'controller/function/uri', 
