@@ -48,18 +48,10 @@ $this->load->view("general/menu_lateral.php");
                         <div class="panel panel-default card-view">
                             <div class="panel-heading">
                                 <div class="pull-left">
-                                    <h6 class="panel-title txt-dark">Perdon, la pagina no esta disponible ahora vuelva mas tarde</h6>
+                                    <h6 class="panel-title txt-dark">Perdon, la pagina no esta disponible ahora. Vuelva cuando la peluquria este abierta (entre 8:00 AM a 7:00 PM).</h6>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
-
-                                    <?php
-                                        echo anchor(
-                                            'turnos/menuCliente',   //'controller/function/uri', 
-                                            'Volver al inicio',     //'Link', 
-                                            'class=""'); 
-?>
-
                         </div>
                     </div>
                 </div>

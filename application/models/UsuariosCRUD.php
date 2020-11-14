@@ -105,7 +105,7 @@
 									on
 										usuarios.id_rol = roles.id
 									where
-										usuarios.id_rol > 2
+										usuarios.id_rol = 3
 									and
 										usuarios.fecha_baja is null;');
 	    	return $q->result();

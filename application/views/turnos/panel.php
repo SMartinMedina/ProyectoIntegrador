@@ -119,7 +119,7 @@
 														<?php
 															}else if( $t->id_estado_turno == 3){
 														?>
-															<span class="label label-danger">
+															<span class="label label-success">
 															
 														<?php
 																echo $t->nombre_estado_turno;
@@ -128,7 +128,7 @@
 														<?php
 															}else if( $t->id_estado_turno == 4){
 														?>
-															<span class="label label-success">
+															<span class="label label-danger">
 															
 														<?php
 																echo $t->nombre_estado_turno;

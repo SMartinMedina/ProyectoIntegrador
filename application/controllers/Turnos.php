@@ -254,14 +254,54 @@ class Turnos extends CI_Controller {
 	public function baja($id_turno){
 		if($this->session->userdata('id_rol_usuario') == 1){
 			$turno = $this->turnosCRUD->getTurno($id_turno);
-			$this->load->view("turnos/baja", array("turno"=> $turno));
+			$clientes = $this->usuariosCRUD->getClientes();
+			$empleados = $this->usuariosCRUD->getEmpleados();
+			$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidadesDisponibles();
+			$empleados_especialidades_bd = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidades();
+			$empleados_especialidades = array();
+
+			foreach ($empleados as $e) {
+				$cant_minutos_demora = 0;
+				foreach ($empleados_especialidades_bd as $ee) {
+					if($e->id == $ee->id_usuario){
+						$cantTurnosEnEsperaPorEmpPorEsp = $this->turnosCRUD->getCantTurnosEnEsperaPorEmpPorEsp(
+																					$ee->id_usuario,
+																					$ee->id_especialidad);
+					
+						$cant_minutos_demora = intval($cant_minutos_demora) + (intval($cantTurnosEnEsperaPorEmpPorEsp[0]->cant) * intval($ee->demora_min));
+					}
+				}
+				$emp_esp = array(
+								'id' => $ee->id, 
+								'id_usuario' => $e->id, 
+								'nombre_empleado' => $ee->nombre_empleado, 
+								'id_especialidad' => $ee->id_especialidad, 
+								'nombre_especialidad_empleado' => $ee->nombre_especialidad_empleado, 
+								'demora_empleado' => $cant_minutos_demora 
+							);
+				array_push($empleados_especialidades, $emp_esp);
+
+			}
+			//$this->load->view("turnos/edita", array("turno"=> $turno));
+			$this->load->view("index.php", 
+					array(
+					"header" => 'header_unlogged.php',
+					"main" => 'turnos/baja.php',
+					"footer" => 'footer_unlogged.php',
+					"clientes" => $clientes,
+					"especialidades" => $especialidades,
+					"empleados" => $empleados,
+					"empleados_especialidades" => $empleados_especialidades_bd,
+					"demora_empleado" => $empleados_especialidades,
+					"turno" => $turno
+					));
 		}else{
 			redirect('login');
 		}		
 	}
 	public function bajabd(){
 		if($this->session->userdata('id_rol_usuario') == 1){
-			$id_turno = $_POST['id'];
+			$id_turno = $_POST['id_turno'];
 			$this->turnosCRUD->bajaTurno($id_turno);
 			$this->panel();
 		}else{
