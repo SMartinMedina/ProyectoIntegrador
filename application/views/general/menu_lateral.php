@@ -115,7 +115,25 @@
 																	"icon" => " zmdi-book ",
 																	"active" => $especialistas ));													
 
-		}
+		}else if($this->session->userdata('id_rol_usuario') == 3){
+																	$urlParts = explode("/", $main);
+																	$seccionUrl = $urlParts[0]; 
+																	$menu = "";
+																	switch ($seccionUrl) {
+																		case 'login':
+																			$menu = "'active'";
+																			break;
+																		default:
+																			
+																			break;
+																	}
+																	$this->load->view('general/boton_menu_lateral.php', array(
+																														"seccionUrl" => "login",
+																														"seccion" => "Menu",
+																														"icon" => " zmdi-book ",
+																														"active" => $menu ));
+																}
+														
 ?>					
 	<li><hr class="light-grey-hr mb-10"></li><!-- LINEA DIVISORIA -->
 					<li>

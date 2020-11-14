@@ -27,22 +27,29 @@ class EspecialidadesEmpleadosCRUD extends CI_Model {
 	    }
 
 		function getEspecialidadesDisponibles(){
-			$q = $this->db->query('select 
-										especialidades_empleados.id,
-										especialidades_empleados.nombre,
-										count(*)
-									from
-										especialidades_empleados
-									inner join
-										usuarios_especialidades
-									on
-										usuarios_especialidades.id_especialidad = especialidades_empleados.id	
-									where
-										especialidades_empleados.fecha_baja is null
-									and
-										usuarios_especialidades.fecha_baja is null	
-									group by
-										especialidades_empleados.id');
+			$q = $this->db->query('
+									select 
+											especialidades_empleados.id, 
+											especialidades_empleados.nombre, 
+											count(*) 
+											from 
+												especialidades_empleados 
+											inner join 
+												usuarios_especialidades 
+											on 
+												usuarios_especialidades.id_especialidad = especialidades_empleados.id 
+											inner join 
+												disponibilidad_empleados 
+											on 
+												usuarios_especialidades.id_usuario = disponibilidad_empleados.id_usuario 
+											where 
+												especialidades_empleados.fecha_baja is null 
+											and 
+												usuarios_especialidades.fecha_baja is null 
+											and 
+												disponibilidad_empleados.horario_salida is null 
+											group by especialidades_empleados.id
+			');
 	    	return $q->result();
 
 		}

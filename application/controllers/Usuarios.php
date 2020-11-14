@@ -389,13 +389,22 @@ class Usuarios extends CI_Controller {
 					}
 	}
 	public function disponibilidad($e){
-			$this->usuariosCRUD->disponibilidadbd($e,1);
+		$this->usuariosCRUD->disponibilidadbd($e,1);
+		if($this->session->userdata('id_rol_usuario') == 4){
 			$this->panel();
-	}
-	public function noDisponibilidad($e){
-		$this->usuariosCRUD->disponibilidadbd($e,0);
+		}else if($this->session->userdata('id_rol_usuario') == 2){
+			redirect('Turnos/panel');
+		}
+}
+public function noDisponibilidad($e){
+	$this->usuariosCRUD->disponibilidadbd($e,0);
+	if($this->session->userdata('id_rol_usuario') == 4){
 		$this->panel();
+	}else if($this->session->userdata('id_rol_usuario') == 2){
+		redirect('Turnos/panel');
 	}
+}
+
 	public function disponiblesTodos(){
 			$this->usuariosCRUD->disponibilidadTodosbd();
 		

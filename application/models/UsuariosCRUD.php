@@ -297,5 +297,26 @@
 			$q = $this->db->query('insert into disponibilidad_empleados(id_usuario, horario_salida) value ('.$id_usuario.',SYSDATE())');
 			return $this->db->insert_id();
 		}
+		function getEmpleadodiponibilidad($id){
+            $q = $this->db->query('select 
+                                        usuarios.id,
+                                        usuarios.nombre as nombre_usuario,
+                                        usuarios.apellido as apellido_usuario,
+                                        disponibilidad_empleados.horario_salida as horario_salida,
+                                        disponibilidad_empleados.horario_entrada as horario_entrada 
+                                    from
+                                        usuarios
+                                    inner join
+                                        disponibilidad_empleados
+                                    on
+                                        usuarios.id = disponibilidad_empleados.id_usuario
+                                    where
+                                        usuarios.id_rol = 2
+                                    and
+                                        usuarios.fecha_baja is null
+                                    and
+                                    usuarios.id='.$id);
+            return $q->result();
+		}
 	}	    	    	    
 ?>

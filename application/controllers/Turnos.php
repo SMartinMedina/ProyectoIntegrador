@@ -11,46 +11,55 @@ class Turnos extends CI_Controller {
         
 	}
 	public function panel(){
-		if($this->session->userdata('id_rol_usuario') == 1){
-			$turnos = $this->turnosCRUD->getTurnos();
-			$this->load->view("index.php", 
-									array(
-										"header" => 'header_unlogged.php',
-										"main" => 'turnos/panel.php',
-										"footer" => 'footer_unlogged.php',
-										"turnos" => $turnos ));
-		}elseif($this->session->userdata('id_rol_usuario') == 2){
-			//$empleados = $this->usuariosCRUD->getEmpleadoshabiles();
-			//$turnos = $this->turnosCRUD->getTurnos();
-			$id_empleado=$this->session->userdata('id_usuario');
-			$turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
-			$this->load->view("index.php", 
-									array(
-										"header" => 'header_unlogged.php',
-										"main" => 'turnos/control.php',
-										"footer" => 'footer_unlogged.php',
-										"turnos" => $turnos));
-		}elseif($this->session->userdata('id_rol_usuario') == 4){
-			$empleados = $this->usuariosCRUD->getEmpleados();
-			$id_empleado=0;
-			if((isset($_POST['empleado']))&&($_POST['empleado']!=0)){
-				$id_empleado=$_POST['empleado'];
-				$turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
-			}else{
-				$turnos = $this->turnosCRUD->getTurnosEmpleados();
-			}
-			$this->load->view("index.php", 
-				array(
-				"header" => 'header_unlogged.php',
-				"main" => 'turnos/controla.php',
-				"footer" => 'footer_unlogged.php',
-				"turnos" => $turnos, 
-				"empleados" => $empleados,
-				"id_empleado"=> $id_empleado));							
-		}else{
-			redirect('login');
-		}	
-	}
+        if($this->session->userdata('id_rol_usuario') == 1){
+            $turnos = $this->turnosCRUD->getTurnos();
+            $this->load->view("index.php", 
+                                    array(
+                                        "header" => 'header_unlogged.php',
+                                        "main" => 'turnos/panel.php',
+                                        "footer" => 'footer_unlogged.php',
+                                        "turnos" => $turnos ));
+        }elseif($this->session->userdata('id_rol_usuario') == 2){
+            //$empleados = $this->usuariosCRUD->getEmpleadoshabiles();
+            //$turnos = $this->turnosCRUD->getTurnos();
+            $id_empleado=$this->session->userdata('id_usuario');
+            $turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
+            $empleado = $this->usuariosCRUD->getEmpleadodiponibilidad($this->session->userdata('id_usuario'));
+                foreach($empleado as $e){
+                                        $horario_entrada=$e->horario_entrada;
+                                        $horario_salida=$e->horario_salida;
+                                        $id=$e->id;
+                                    }       
+                $this->load->view("index.php", 
+                                    array(
+                                        "header" => 'header_unlogged.php',
+                                        "main" => 'turnos/control.php',
+                                        "footer" => 'footer_unlogged.php',
+                                        "turnos" => $turnos,
+                                        "horario_entrada" =>$horario_entrada,
+                                        "horario_salida"=>$horario_salida,
+                                        "id"=>$id));    
+        }elseif($this->session->userdata('id_rol_usuario') == 4){
+            $empleados = $this->usuariosCRUD->getEmpleados();
+            $id_empleado=0;
+            if((isset($_POST['empleado']))&&($_POST['empleado']!=0)){
+                $id_empleado=$_POST['empleado'];
+                $turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
+            }else{
+                $turnos = $this->turnosCRUD->getTurnosEmpleados();
+            }
+            $this->load->view("index.php", 
+                array(
+                "header" => 'header_unlogged.php',
+                "main" => 'turnos/controla.php',
+                "footer" => 'footer_unlogged.php',
+                "turnos" => $turnos, 
+                "empleados" => $empleados,
+                "id_empleado"=> $id_empleado));                         
+        }else{
+            redirect('login');
+        }   
+    }
 	public function panelTurnosPorCliente(){
 		if($this->session->userdata('id_rol_usuario') == 3){	
 			$turnos = $this->turnosCRUD->getTurnosClienteById($this->session->userdata('id_usuario'));
@@ -322,31 +331,33 @@ class Turnos extends CI_Controller {
 		}
 	}
 	public function inicializar($id_turno){
-		if($this->session->userdata('id_rol_usuario') == 2){
-			$turno = $this->turnosCRUD->avanzaTurno($id_turno,2); // 2: Siendo Atendido
-			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,2);
-			$this->panel();
-		}else{
-			redirect('login');
-		}	
-	}
-	public function finalizar($id_turno){
-		if($this->session->userdata('id_rol_usuario') == 2){
-			$turno = $this->turnosCRUD->avanzaTurno($id_turno,3); // 3: Finalizado
-			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,3);
-			$this->panel();
-		}else{
-			redirect('login');
-		}		
-	}
+        if(($this->session->userdata('id_rol_usuario') == 2)||($this->session->userdata('id_rol_usuario') == 4)){
+            $turno = $this->turnosCRUD->avanzaTurno($id_turno,2); // 2: Siendo Atendido
+            $this->turnosCRUD->registrarCambioEstadoTurno($id_turno,2);
+            
+            $this->panel();
+        }else{
+            redirect('login');
+        }   
+    }
+    public function finalizar($id_turno){
+        if(($this->session->userdata('id_rol_usuario') == 2)||($this->session->userdata('id_rol_usuario') == 4)){
+            $turno = $this->turnosCRUD->avanzaTurno($id_turno,3); // 3: Finalizado
+            $this->turnosCRUD->registrarCambioEstadoTurno($id_turno,3);
+            $this->panel();
+        }else{
+            redirect('login');
+        }       
+    }
 
-	public function cancelar($id_turno){
-		if($this->session->userdata('id_rol_usuario') == 2){
-			$turno = $this->turnosCRUD->avanzaTurno($id_turno,4); // 4: Cancelado
-			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,4);
-			$this->panel();
-		}else{
-			redirect('login');
-		}	
-	}
+    public function cancelar($id_turno){
+        if(($this->session->userdata('id_rol_usuario') == 2)||($this->session->userdata('id_rol_usuario') == 4)||($this->session->userdata('id_rol_usuario') == 3)){
+            $turno = $this->turnosCRUD->avanzaTurno($id_turno,4); // 4: Cancelado
+            $this->turnosCRUD->registrarCambioEstadoTurno($id_turno,4);
+            $this->panel();
+        }else{
+            redirect('login');
+        }   
+    }
+
 }

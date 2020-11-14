@@ -54,6 +54,17 @@
 									<!--<p class="text-muted">Add class <code>table</code> in table tag.</p>-->
 									<div class="table-wrap mt-40">
 										<div class="table-responsive">
+										<?php
+                                                            $this->load->view("empleados/botones_disponibilidad.php", 
+                                                                array(
+                                                                    "seccion" => "Usuarios",
+                                                                    "horario_entrada" =>$horario_entrada,
+                                                                    "horario_salida"=>$horario_salida,
+                                                                    "id_empleado"=>$id
+                                                                )
+                                                            );
+                                                        ?>
+
 											<table class="table mb-0">
 												<thead>
 												  <tr>
