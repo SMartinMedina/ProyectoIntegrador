@@ -34,14 +34,13 @@ $this->load->view("general/menu_lateral.php");
 				<!-- Title -->
 				<div class="row heading-bg">
 					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-					  <h5 class="txt-dark">form wizard</h5>
+					  <h5 class="txt-dark">Alta de Turno</h5>
 					</div>
 					<!-- Breadcrumb -->
 					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 					  <ol class="breadcrumb">
-						<li><a href="index.html">Dashboard</a></li>
-						<li><a href="#"><span>forms</span></a></li>
-						<li class="active"><span>form-wizard</span></li>
+						<li><span>Turnos</span></li>
+						<li class="active"><span>Alta</span></li>
 					  </ol>
 					</div>
 					<!-- /Breadcrumb -->
@@ -54,7 +53,7 @@ $this->load->view("general/menu_lateral.php");
 						<div class="panel panel-default card-view">
 							<div class="panel-heading">
 								<div class="pull-left">
-									<h6 class="panel-title txt-dark">Basic Wizard</h6>
+									<h6 class="panel-title txt-dark">Alta</h6>
 								</div>
 								<div class="clearfix"></div>
 							</div>

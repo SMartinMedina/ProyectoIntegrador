@@ -191,6 +191,30 @@ class Turnos extends CI_Controller {
 				"main" => 'cliente/menu.php',
 				"footer" => 'footer_unlogged.php'));
 	}
+	function testMail(){
+		$mensaje="<!DOCTYPE html><html lang='es'><body><div><p> Su turno a sido creado con exito</p>
+                    <br>
+                    <table>
+                    <thead>
+                    <tr>
+                      <th>Servicio</th>
+                      <th>Atiende</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    </table></div></body></html>";
+            //              var_dump($mensaje);
+                        $this->email->from('no-reply@lastit.com', 'LastIt.com');
+                        $this->email->to($email);
+                        $this->email->subject('Reseteo de la Contraseña');
+                        $this->email->message($mensaje);
+                        $this->email->send();
+		$this->load->view("index.php", 
+			array(
+				"header" => 'header_unlogged.php',
+				"main" => 'cliente/menu.php',
+				"footer" => 'footer_unlogged.php'));
+	}
 	public function altabd(){
 		if($this->session->userdata('id_rol_usuario') == 1){
 			foreach ($_POST['especialidades'] as $id_especialidad) {
