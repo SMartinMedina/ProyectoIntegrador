@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<title>LastIT</title>
+		<title>IL FIGARO</title>
 		<meta name="description" content="TODO Descripcion del sitio" />
 		<meta name="keywords" content="TODO Aca van las keywords" />
 		<meta name="author" content="hencework"/>

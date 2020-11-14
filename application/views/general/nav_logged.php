@@ -3,9 +3,16 @@
 				<div class="mobile-only-brand pull-left">
 					<div class="nav-header pull-left">
 						<div class="logo-wrap">
-							<a href="index.html">
+						<?php 	
+							if($this->session->userdata('id_rol_usuario')==3){
+								$url='Turnos/menuCliente';
+							}else{
+								$url='panelturno';
+							}
+							?>
+							<a href="<?php echo site_url($url);?> ">
 								<img class="brand-img" src="<?php echo base_url();?>img/logo.png" alt="brand"/>
-								<span class="brand-text">LASTIT</span>
+								<span class="brand-text">IL FIGARO</span>
 							</a>
 						</div>
 					</div>	

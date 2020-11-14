@@ -8,9 +8,9 @@
 		<div class="wrapper box-layout pa-0">
 			<header class="sp-header">
 				<div class="sp-logo-wrap pull-left">
-					<a href="index.html">
+					<a href="<?php echo site_url('Login/index');?>">
 						<img class="brand-img mr-10" src="<?php echo base_url();?>img/logo.png" alt="brand"/>
-						<span class="brand-text">LASTIT</span>
+						<span class="brand-text">IL FIGARO</span>
 					</a>
 				</div>
 				<div class="form-group mb-0 pull-right">
@@ -37,7 +37,7 @@
 								<div class="row">
 									<div class="col-sm-12 col-xs-12">
 										<div class="mb-30">
-											<h3 class="text-center txt-dark mb-10">Registrate a LASTIT</h3>
+											<h3 class="text-center txt-dark mb-10">Registrate a IL FIGARO</h3>
 											<h6 class="text-center nonecase-font txt-grey">Complete los datos</h6>
 										</div>	
 										<div class="form-wrap">

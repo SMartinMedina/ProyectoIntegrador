@@ -8,9 +8,9 @@
 		<div class="wrapper box-layout pa-0">
 			<header class="sp-header">
 				<div class="sp-logo-wrap pull-left">
-					<a href="index.html">
+					<a href="<?php echo site_url('Login/index');?>">
 						<img class="brand-img mr-10" src="<?php echo base_url();?>img/logo.png" alt="brand"/>
-						<span class="brand-text">LASTIT</span>
+						<span class="brand-text">IL FIGARO</span>
 					</a>
 				</div>
 				<div class="form-group mb-0 pull-right">

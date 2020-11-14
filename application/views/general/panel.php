@@ -13,7 +13,7 @@
 						<div class="logo-wrap">
 							<a href="index.html">
 								<img class="brand-img" src="<?php echo base_url();?>img/logo.png" alt="brand"/>
-								<span class="brand-text">LASTIT</span>
+								<span class="brand-text">IL FIGARO</span>
 							</a>
 						</div>
 					</div>	
