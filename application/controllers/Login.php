@@ -159,8 +159,13 @@ class Login extends CI_Controller {
 			$usuario = $this->usuariosCRUD->altaUsuario(3,$nombre,$apellido,$email,$pass,$email);//id=3 es de cliente
 			//$this->mandar_Mail();
 			$url=site_url('Login/index');
-			$mensaje="<!DOCTYPE html><html lang='es'><body><div><p> Su cuenta ha sido creada con exito. Si desea iniciar sesion <a href='".$url."'> haga aqui</a></p></body></html>";
-//				var_dump($mensaje);
+			$mensaje = $this->buildMensajeAltaUsuario($url);
+    		$config = array (
+				                  'mailtype' => 'html',
+				                  'charset'  => 'utf-8',
+				                  'priority' => '1'
+				                   );
+            $this->email->initialize($config);
 			$this->email->from('no-reply@lastit.com', 'LastIt.com');
 			$this->email->to($email);
 			$this->email->subject('Cuenta creada');
@@ -235,8 +240,13 @@ class Login extends CI_Controller {
 				$this->usuariosCRUD->resetUsuario($u->id,$pass);
 			}
 			$url=site_url('Login/recover').'/'.$pass;
-			$mensaje="<!DOCTYPE html><html lang='es'><body><div><p> Si desea cambiar <a href='".$url."'> haga aqui</a></p></body></html>";
-//				var_dump($mensaje);
+			$mensaje = $this->buildMensajeReseteoPass($url);
+    		$config = array (
+				                  'mailtype' => 'html',
+				                  'charset'  => 'utf-8',
+				                  'priority' => '1'
+				                   );
+            $this->email->initialize($config);
 			$this->email->from('no-reply@lastit.com', 'LastIt.com');
 			$this->email->to($email);
 			$this->email->subject('Reseteo de la Contraseña');
@@ -295,5 +305,55 @@ class Login extends CI_Controller {
 		$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$pass_temp = substr(str_shuffle($permitted_chars), 0, 30);
 		return $pass_temp;
+	}
+	public function buildMensajeReseteoPass($url){
+		$mensaje = "";
+    	$mensaje .= "";
+    	$mensaje .= "<html><body><table style='width: 100%;'>";
+    	$mensaje .= "<tr style='background-color: black; height: 50px;color:white;'>";
+    	$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+    	$mensaje .= "<h1><img src='http://www.smartinweb.com/proyectointegrador/img/logo.png'>IL FIGARO</h1></td></tr>";
+		$mensaje .= "<tr style='background-color: white;'>";
+		$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+		$mensaje .= "<h2>Sistema de Turnos</h2>";
+		$mensaje .= "<p>Realizamos el reseteo de tu Contraseña con éxito.</p><hr /></td></tr>";
+		$mensaje .= "<tr style='background-color: white;'>";
+		$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+		$mensaje .= "<p>Para poder resetear tu contraseña y poder acceder al sistema hacé click en el"; 
+		$mensaje .= "siguitente link.</p>";
+		$mensaje .= "<a style='font-size: 30px;' href='".$url."'>Reestablecer Contraseña</a>";
+		$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>";
+		$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+		$mensaje .= "<h2>Gracias por confiar en nuestro sistema.</h2><p>";
+		$mensaje .= "En el link podras volver a configurar tu contraseña.</p><br />";
+		$mensaje .= "<a href='http://www.smartinweb.com/proyectointegrador'>";
+		$mensaje .= "IL FIGARO</a></p></td></tr></table></body></html>";
+		return $mensaje;
+
+	}
+
+	function buildMensajeAltaUsuario($nombre_usuario){
+		$mensaje = "";
+    	$mensaje .= "";
+    	$mensaje .= "<html><body><table style='width: 100%;'>";
+    	$mensaje .= "<tr style='background-color: black; height: 50px;color:white;'>";
+    	$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+    	$mensaje .= "<h1><img src='http://www.smartinweb.com/proyectointegrador/img/logo.png'>IL FIGARO</h1></td></tr>";
+		$mensaje .= "<tr style='background-color: white;'>";
+		$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+		$mensaje .= "<h2>Sistema de Turnos</h2>";
+		$mensaje .= "<p>Te damos la bienvenida al sistema de turnos diseñado para IL FIGARO</p><hr /></td></tr>";
+		$mensaje .= "<tr style='background-color: white;'>";
+		$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+		$mensaje .= "<p>Este sistema de turnos te permite:</p><ul><li>Sacar turnos</li>";
+		$mensaje .= "<li>Controlar el estado de la fila en tiempo real</li>";
+		$mensaje .= "<li>Controlar el estado de tus turnos</li></ul>";
+		$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>";
+		$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+		$mensaje .= "<h2>Gracias por confiar en nuestro sistema.</h2><p>";
+		$mensaje .= "<a href='http://www.smartinweb.com/proyectointegrador'>";
+		$mensaje .= "IL FIGARO </a></p></td></tr></table></body></html>";
+		return $mensaje;
+
 	}
 }

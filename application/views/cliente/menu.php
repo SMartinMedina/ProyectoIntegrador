@@ -78,15 +78,7 @@
 											'<button class="btn btn-default btn-block">Mis Turnos</button>',		//'Link', 
 											'class=""'); 
 									?>
-										<br />
-<?php										
-										echo anchor(
-											'turnos/testMail',	//'controller/function/uri', 
-											'<button class="btn btn-default btn-block">TestMail</button>',		//'Link', 
-											'class=""'); 
-									?>
-										
-										
+
 									</div>
 								</div>
 							</div>

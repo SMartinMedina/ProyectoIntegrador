@@ -191,30 +191,6 @@ class Turnos extends CI_Controller {
 				"main" => 'cliente/menu.php',
 				"footer" => 'footer_unlogged.php'));
 	}
-	function testMail(){
-		$mensaje="<!DOCTYPE html><html lang='es'><body><div><p> Su turno a sido creado con exito</p>
-                    <br>
-                    <table>
-                    <thead>
-                    <tr>
-                      <th>Servicio</th>
-                      <th>Atiende</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    </table></div></body></html>";
-            //              var_dump($mensaje);
-                        $this->email->from('no-reply@lastit.com', 'LastIt.com');
-                        $this->email->to($email);
-                        $this->email->subject('Reseteo de la Contraseña');
-                        $this->email->message($mensaje);
-                        $this->email->send();
-		$this->load->view("index.php", 
-			array(
-				"header" => 'header_unlogged.php',
-				"main" => 'cliente/menu.php',
-				"footer" => 'footer_unlogged.php'));
-	}
 	public function altabd(){
 		if($this->session->userdata('id_rol_usuario') == 1){
 			foreach ($_POST['especialidades'] as $id_especialidad) {
@@ -233,44 +209,45 @@ class Turnos extends CI_Controller {
 			
 			$this->panel();
 		}else if($this->session->userdata('id_rol_usuario') == 3){
-
+			$id_cliente = $this->session->userdata('id_usuario');
+			$cliente = $this->usuariosCRUD->getUsuario($id_cliente);
+			$servicios_especialistas_msj = "";
 			foreach ($_POST['especialidades'] as $id_especialidad) {
 
 				$POSTEmpServicio = "sel_servicio_".$id_especialidad;
 				if($_POST[$POSTEmpServicio] != 0){
-					$id_cliente = $this->session->userdata('id_usuario');
+					
 					$idservicio_idempleado = $_POST[$POSTEmpServicio];
 					$idservicio_idempleado_arr = explode("-", $idservicio_idempleado);
 					$id_empleado = $idservicio_idempleado_arr[1]; // 
+					$empleado = $this->usuariosCRUD->getUsuario($id_empleado);
 					$id_servicio = $id_especialidad;
+					$servicio = $this->especialidadesEmpleadosCRUD->getEspecialidad($id_especialidad);
 					$id_estado_turno = 1; //Se setea por default estado "EN ESPERA"
-					$email=$this->session->userdata('');
+					$email=$this->session->userdata('email_usuario');
 					$this->turnosCRUD->altaTurno($id_cliente, $id_empleado,$id_servicio, $id_estado_turno);
-					$mensaje="<!DOCTYPE html><html lang='es'><body><div><p> Su turno a sido creado con exito</p>
-                    <br>
-                    <table>
-                    <thead>
-                    <tr>
-                      <th>Servicio</th>
-                      <th>Atiende</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    </table></div></body></html>";
-            //              var_dump($mensaje);
-                        $this->email->from('no-reply@lastit.com', 'LastIt.com');
-                        $this->email->to($email);
-                        $this->email->subject('Reseteo de la Contraseña');
-                        $this->email->message($mensaje);
-                        $this->email->send();
-
-					
+					$servicios_especialistas_msj .= "<h3>".$servicio->nombre."</h3>";
+					$servicios_especialistas_msj .= "<h4>".$empleado->nombre_usuario."</h4>";
+					$servicios_especialistas_msj .= "<hr />";
 				}else{
 
 					// A DEFINIR
 				}
 			}
-			$this->menuCliente();
+			$mensaje = $this->buildMensajeAltaTurno($cliente->nombre_usuario, $servicios_especialistas_msj);
+    		$config = array (
+				                  'mailtype' => 'html',
+				                  'charset'  => 'utf-8',
+				                  'priority' => '1'
+				                   );
+            $this->email->initialize($config);
+            $this->email->from('no-reply@lastit.com', 'LastIt.com');
+            $this->email->to($email);
+            $this->email->subject('Alta de Turno');
+            $this->email->message($mensaje);
+            $this->email->send();
+
+			$this->menuCliente($servicios_especialistas_msj);
 		}else{
 			redirect('login');
 		}	
@@ -422,6 +399,31 @@ class Turnos extends CI_Controller {
         }else{
             redirect('login');
         }   
+    }
+
+    public function buildMensajeAltaTurno($nombre_cliente,$especialidades_empleados){
+    	$mensaje = "";
+    	$mensaje .= "";
+    	$mensaje .= "<html><body><table style='width: 100%;'>";
+    	$mensaje .= "<tr style='background-color: black; height: 50px;color:white;'>";
+    	$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+    	$mensaje .= "<h1><img src='http://www.smartinweb.com/proyectointegrador/img/logo.png'>IL FIGARO</h1></td></tr>";
+		$mensaje .= "<tr style='background-color: white;'>";
+		$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+		$mensaje .= "<h2>Sistema de Turnos</h2>";
+		$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
+		$mensaje .= "<p>Tu/s turno/s ha sido registrado con éxito.</p><hr /></td></tr>";
+		$mensaje .= "<tr style='background-color: white;'>";
+		$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+		$mensaje .= $especialidades_empleados;
+		$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>";
+		$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+		$mensaje .= "<h2>Gracias por confiar en nuestro sistema.</h2><p>";
+		$mensaje .= "Te recomendamos que estés pendiente a las alertas que te estaremos enviando para el seguimiento";
+		$mensaje .= "del estado de tu turno.<br /><br /> Podes consultarlo en el siguiente";
+		$mensaje .= "<a href='http://www.smartinweb.com/proyectointegrador'>";
+		$mensaje .= "link </a></p></td></tr></table></body></html>";
+		return $mensaje;
     }
 
 }
