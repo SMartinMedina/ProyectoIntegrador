@@ -423,22 +423,6 @@ class Turnos extends CI_Controller {
 			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,4);
 			$turn=$this->turnosCRUD->getTurno($id_turno);
 			$turnos=$this->turnosCRUD->getTurnosEmpEnEspera($turn->id_empleado);
-			$c=3;
-			$user=$this->usuariosCRUD->getUsuario($turn->id_cliente);
-			$mail=$usuario->email;
-			$mensaje=$this->buildMensajeCancelar($c,$turn->nombre_cliente);
-			$config = array (
-				'mailtype' => 'html',
-				'charset'  => 'utf-8',
-				'priority' => '1'
-				 );
-				$this->email->initialize($config);
-				$this->email->from('no-reply@lastit.com', 'LastIt.com');
-				$this->email->to($mail);
-				$this->email->subject('Avance de turnos');
-				$this->email->message($mensaje);
-				$this->email->send();
-			$c=0;
 			foreach($turnos as $t){
 				
 				
