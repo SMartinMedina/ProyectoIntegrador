@@ -388,8 +388,8 @@ class Usuarios extends CI_Controller {
 						
 					}
 	}
-	public function disponibilidad($e){
-		$this->usuariosCRUD->disponibilidadbd($e,1);
+	public function disponibilidad($id_empleado){
+		$this->usuariosCRUD->disponibilidadbd($id_empleado,1);
 	
 		if($this->session->userdata('id_rol_usuario') == 4){
 			$this->panel();
@@ -397,9 +397,9 @@ class Usuarios extends CI_Controller {
 			redirect('Turnos/panel');
 		}
 }
-public function noDisponibilidad($e){
-	$this->usuariosCRUD->disponibilidadbd($e,0);	
-	redirect('Turnos/deshabilitarTurnos/'.$e);
+public function noDisponibilidad($id_empleado){
+	$this->usuariosCRUD->disponibilidadbd($id_empleado,0);	
+	
 	
 }
 
@@ -410,7 +410,11 @@ public function noDisponibilidad($e){
 	}
 	public function noDisponiblesTodos(){
 		$this->usuariosCRUD->noDisponibilidadTodosbd();
-		redirect('Turnos/deshabilitarTodosTurnos');
+		if($this->session->userdata('id_rol_usuario') == 4){
+			$this->panel();
+		}else if($this->session->userdata('id_rol_usuario') == 2){
+			redirect('Turnos/panel');
+		}
 		
 	}
 }

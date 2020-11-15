@@ -422,7 +422,7 @@ class Turnos extends CI_Controller {
             $turno = $this->turnosCRUD->avanzaTurno($id_turno,4); // 4: Cancelado
 			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,4);
 			$turn=$this->turnosCRUD->getTurno($id_turno);
-			$turnos=$this->turnosCRUD->getTurnosEmp($turn->id_empleado);
+			$turnos=$this->turnosCRUD->getTurnosEmpEnEspera($turn->id_empleado);
 			$c=3;
 			$user=$this->usuariosCRUD->getUsuario($turn->id_cliente);
 			$mail=$usuario->email;
@@ -441,41 +441,9 @@ class Turnos extends CI_Controller {
 			$c=0;
 			foreach($turnos as $t){
 				
-				if(sizeof($turnos)==2){
-					$c=2;
-					$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
-					$email=$usuario->email;
-					$mensaje=$this->buildMensajeCancelar($c,$t->nombre_cliente);
-					$config = array (
-						'mailtype' => 'html',
-						'charset'  => 'utf-8',
-						'priority' => '1'
-						 );
-						$this->email->initialize($config);
-						$this->email->from('no-reply@lastit.com', 'LastIt.com');
-						$this->email->to($email);
-						$this->email->subject('Avance de turnos');
-						$this->email->message($mensaje);
-						$this->email->send();
-				}else{
+				
 					if($t->id_turno>$id_turno){
-						if($c==0){
-							$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
-							$email=$usuario->email;
-							$mensaje=$this->buildMensajeCancelar($c,$t->nombre_cliente);
-							$config = array (
-							'mailtype' => 'html',
-							'charset'  => 'utf-8',
-							'priority' => '1'
-							 );
-							$this->email->initialize($config);
-							$this->email->from('no-reply@lastit.com', 'LastIt.com');
-							$this->email->to($email);
-							$this->email->subject('Avance de turnos');
-							$this->email->message($mensaje);
-							$this->email->send();				
-						}else if ($c==1){
-							$c=0;
+						
 							$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
 							$email=$usuario->email;
 							$mensaje=$this->buildMensajeCancelar($c,$t->nombre_cliente);
@@ -490,76 +458,18 @@ class Turnos extends CI_Controller {
 								$this->email->subject('Avance de turnos');
 								$this->email->message($mensaje);
 								$this->email->send();
-						}
-					}else if($t->id_estado_turno==$id_turno){
-						$x=$c;
-						$c=3;
-						$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
-						$email=$usuario->email;
-						$mensaje=$this->buildMensajeCancelar($c,$t->nombre_cliente);
-						$config = array (
-							'mailtype' => 'html',
-							'charset'  => 'utf-8',
-							'priority' => '1'
-							);
-							$this->email->initialize($config);
-							$this->email->from('no-reply@lastit.com', 'LastIt.com');
-							$this->email->to($email);
-							$this->email->subject('Avance de turnos');
-							$this->email->message($mensaje);
-							$this->email->send();
-							$c=$x;
-					}else if($t->id_estado_turno==2){
-						$c=1;
-					}			
 					
-				}	
+					}	
 			}
             $this->panel();
 		}else if($this->session->userdata('id_rol_usuario') == 3){
 			$turno = $this->turnosCRUD->avanzaTurno($id_turno,4); // 4: Cancelado
 			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,4);
 			$turn=$this->turnosCRUD->getTurno($id_turno);
-			$turnos=$this->turnosCRUD->getTurnosEmp($turn->id_empleado);
-			$x=$id_turno-1;
-			$c=0;
+			$turnos=$this->turnosCRUD->getTurnosEmpEnEspera($turn->id_empleado);
 			foreach($turnos as $t){
-				
-				if(sizeof($turnos)==1){
-					$c=2;
-					$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
-					$email=$usuario->email;
-					$mensaje=$this->buildMensajeCancelar($c,$t->nombre_cliente);
-					$config = array (
-						'mailtype' => 'html',
-						'charset'  => 'utf-8',
-						'priority' => '1'
-						 );
-						$this->email->initialize($config);
-						$this->email->from('no-reply@lastit.com', 'LastIt.com');
-						$this->email->to($email);
-						$this->email->subject('Avance de turnos');
-						$this->email->message($mensaje);
-						$this->email->send();
-				}else{
 					if($t->id_turno>$id_turno){
-						if($c==0){
-							$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
-							$email=$usuario->email;
-							$mensaje=$this->buildMensajeCancelar($c,$t->nombre_cliente);
-							$config = array (
-							'mailtype' => 'html',
-							'charset'  => 'utf-8',
-							'priority' => '1'
-							 );
-							$this->email->initialize($config);
-							$this->email->from('no-reply@lastit.com', 'LastIt.com');
-							$this->email->to($email);
-							$this->email->subject('Avance de turnos');
-							$this->email->message($mensaje);
-							$this->email->send();				
-						}else if ($c==1){
-							
+						
 							$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
 							$email=$usuario->email;
 							$mensaje=$this->buildMensajeCancelar($c,$t->nombre_cliente);
@@ -574,83 +484,17 @@ class Turnos extends CI_Controller {
 								$this->email->subject('Avance de turnos');
 								$this->email->message($mensaje);
 								$this->email->send();
-							$c=0;
+						
 						}
-					
-					}else if($t->id_estado_turno==2){
-						$c=1;
-					}				
-					
-				}	
+							
 			}
             $this->menuCliente();
 		}else{
             redirect('login');
         }   
 	}
-	public function buildMensajeCancelar($c,$nombre_cliente){ 
-		if($c=2){
-			$mensaje = "";
-			$mensaje .= "";
-			$mensaje .= "<html><body><table style='width: 100%;'>";
-			$mensaje .= "<tr style='background-color: black; height: 50px;color:white;'>";
-			$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-			$mensaje .= "<h1><img src='http://www.smartinweb.com/proyectointegrador/img/logo.png'>IL FIGARO</h1></td></tr>";
-			$mensaje .= "<tr style='background-color: white;'>";
-			$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-			$mensaje .= "<h2>Sistema de Turnos</h2>";
-			$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-			$mensaje .= "<p>Debido a que uno de los clientes adelante de usted a cancelado su turno, pronto lo atenderemos a usted. Por favor, acerquese a la peluqueria</p></td></tr>";
-			$mensaje .= "<tr style='background-color: white;'>";
-			$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
-			$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-			$mensaje .= "<h2>Gracias por confiar en nuestro sistema.</h2><p>";
-			$mensaje .= "Si desea sacar mas turnos o cancela este turno,";
-			$mensaje .= " podes consultarlo en el siguiente";
-			$mensaje .= "<a href='http://www.smartinweb.com/proyectointegrador'>";
-			$mensaje .= "link </a></p></td></tr></table></body></html>";
-		}else if($c=1){
-							$mensaje = "";
-							$mensaje .= "";
-							$mensaje .= "<html><body><table style='width: 100%;'>";
-							$mensaje .= "<tr style='background-color: black; height: 50px;color:white;'>";
-							$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-							$mensaje .= "<h1><img src='http://www.smartinweb.com/proyectointegrador/img/logo.png'>IL FIGARO</h1></td></tr>";
-							$mensaje .= "<tr style='background-color: white;'>";
-							$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-							$mensaje .= "<h2>Sistema de Turnos</h2>";
-							$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-							$mensaje .= "<p>Debido a que uno de los clientes adelante de usted a cancelado su turno, pronto lo atenderemos a usted. Por favor, acerquese a la peluqueria</p></td></tr>";
-							$mensaje .= "<tr style='background-color: white;'>";
-							$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
-							$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-							$mensaje .= "<h2>Gracias por confiar en nuestro sistema.</h2><p>";
-							$mensaje .= "Si desea sacar mas turnos o cancela este turno,";
-							$mensaje .= " podes consultarlo en el siguiente";
-							$mensaje .= "<a href='http://www.smartinweb.com/proyectointegrador'>";
-							$mensaje .= "link </a></p></td></tr></table></body></html>";
-		}else if($c=3){
-							$mensaje = "";
-							$mensaje .= "";
-							$mensaje .= "<html><body><table style='width: 100%;'>";
-							$mensaje .= "<tr style='background-color: black; height: 50px;color:white;'>";
-							$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-							$mensaje .= "<h1><img src='http://www.smartinweb.com/proyectointegrador/img/logo.png'>IL FIGARO</h1></td></tr>";
-							$mensaje .= "<tr style='background-color: white;'>";
-							$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-							$mensaje .= "<h2>Sistema de Turnos</h2>";
-							$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-							$mensaje .= "<p>Lo sentimos, pero su turno a sido cancelado, debido a que tardo demasiado tiempo en llegar a la peluqueria</p></td></tr>";
-							$mensaje .= "<tr style='background-color: white;'>";
-							$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
-							$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-							$mensaje .= "<h2>Gracias por confiar en nuestro sistema.</h2><p>";
-							$mensaje .= "Si desea sacar mas turnos o cancela este turno,";
-							$mensaje .= " podes consultarlo en el siguiente";
-							$mensaje .= "<a href='http://www.smartinweb.com/proyectointegrador'>";
-							$mensaje .= "link </a></p></td></tr></table></body></html>";
+	public function buildMensajeCancelar($c,$nombre_cliente){
 
-		}else{
 										$mensaje = "";
 										$mensaje .= "";
 										$mensaje .= "<html><body><table style='width: 100%;'>";
@@ -661,7 +505,7 @@ class Turnos extends CI_Controller {
 										$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
 										$mensaje .= "<h2>Sistema de Turnos</h2>";
 										$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-										$mensaje .= "<p>Uno de los clientes adelante de usted a cancelado su turno. Por lo cual, su turno sea adelantado por un turno el tiempo de espera para que le podamos prestar nuestros servicios.</p></td></tr>";
+										$mensaje .= "<p>Tinie menos tiempo que espera par ser atendido</p></td></tr>";
 										$mensaje .= "<tr style='background-color: white;'>";
 										$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
 										$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
@@ -745,80 +589,6 @@ class Turnos extends CI_Controller {
 		$mensaje .= "<a href='http://www.smartinweb.com/proyectointegrador'>";
 		$mensaje .= "link </a></p></td></tr></table></body></html>";
 		return $mensaje;
-    }
-	public function deshabilitarTurnos($id_empleado){
-		
-		$turnos=$this->turnosCRUD->getTurnosEmp($id_empleado);
-		$empleado=$this->usuariosCRUD->getUsuario($id_empleado);
-		foreach($turnos as $t){
-			$turno = $this->turnosCRUD->avanzaTurno($t->id_turno,4); // 4: Cancelado
-			$this->turnosCRUD->registrarCambioEstadoTurno($t->id_turno,4);
-			$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
-			$email=$usuario->email;
-			$mensaje=$this->buildMensajeDeshabilitar($t->nombre_cliente,$empleado->nombre_usuario);
-							$config = array (
-							'mailtype' => 'html',
-							'charset'  => 'utf-8',
-							'priority' => '1'
-							 );
-							$this->email->initialize($config);
-							$this->email->from('no-reply@lastit.com', 'LastIt.com');
-							$this->email->to($email);
-							$this->email->subject('Avance de turnos');
-							$this->email->message($mensaje);
-							$this->email->send();		
-		}
-		if($this->session->userdata('id_rol_usuario') == 4){
-			redirect('Usuarios/panel');
-		}else if($this->session->userdata('id_rol_usuario') == 2){
-			$this->panel();
-		}
-	}
-	public function buildMensajeDeshabilitar($nombre_cliente,$nombre_usuario){
-		$mensaje = "";
-                    $mensaje .= "";
-                    $mensaje .= "<html><body><table style='width: 100%;'>";
-                    $mensaje .= "<tr style='background-color: black; height: 50px;color:white;'>";
-                    $mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-                    $mensaje .= "<h1><img src='http://www.smartinweb.com/proyectointegrador/img/logo.png'>IL FIGARO</h1></td></tr>";
-                    $mensaje .= "<tr style='background-color: white;'>";
-                    $mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-                    $mensaje .= "<h2>Sistema de Turnos</h2>";
-                    $mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-                    $mensaje .= "<p>Lo sentimos, pero el estista ".$nombre_usuario." que escogio a caba de terminar su horario de laburo, por lo cual su turno a sido cancelado</p></td></tr>";
-                    $mensaje .= "<tr style='background-color: white;'>";
-                    $mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
-                    $mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-                    $mensaje .= "<h2>Gracias por confiar en nuestro sistema.</h2><p>";
-                    $mensaje .= "Si desea sacar mas turnos o cancela este turno,";
-                    $mensaje .= " podes consultarlo en el siguiente";
-                    $mensaje .= "<a href='http://www.smartinweb.com/proyectointegrador'>";
-					$mensaje .= "link </a></p></td></tr></table></body></html>";
-					return $mensaje;
-	}
-	public function deshabilitarTodosTurnos(){
-		$turno = $this->turnosCRUD->avanzaTurno($id_turno,4); // 4: Cancelado
-		$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,4);
-		$turnos=$this->turnosCRUD->getTurnosEnEspera();
-		foreach($turnos as $t){
-			$turno = $this->turnosCRUD->avanzaTurno($t->id_turno,4); // 4: Cancelado
-			$this->turnosCRUD->registrarCambioEstadoTurno($t->id_turno,4);
-			$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
-			$email=$usuario->email;
-			$mensaje=$this->buildMensajeDeshabilitar($t->nombre_cliente,$t->nombre_empleado);
-							$config = array (
-							'mailtype' => 'html',
-							'charset'  => 'utf-8',
-							'priority' => '1'
-							 );
-							$this->email->initialize($config);
-							$this->email->from('no-reply@lastit.com', 'LastIt.com');
-							$this->email->to($email);
-							$this->email->subject('Avance de turnos');
-							$this->email->message($mensaje);
-							$this->email->send();		
-		}
-		
 	}
 	
 }
