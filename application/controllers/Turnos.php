@@ -456,7 +456,7 @@ class Turnos extends CI_Controller {
 						
 							$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
 							$email=$usuario->email;
-							$mensaje=$this->buildMensajeCancelar($c,$t->nombre_cliente);
+							$mensaje=$this->buildMensajeCancelar($t->nombre_cliente);
 							$config = array (
 								'mailtype' => 'html',
 								'charset'  => 'utf-8',
@@ -477,7 +477,7 @@ class Turnos extends CI_Controller {
             redirect('login');
         }   
 	}
-	public function buildMensajeCancelar($c,$nombre_cliente){
+	public function buildMensajeCancelar($nombre_cliente){
 
 										$mensaje = "";
 										$mensaje .= "";
