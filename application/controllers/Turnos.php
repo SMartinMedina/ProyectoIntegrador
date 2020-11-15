@@ -424,7 +424,7 @@ class Turnos extends CI_Controller {
 			$turn=$this->turnosCRUD->getTurno($id_turno);
 			$turnos=$this->turnosCRUD->getTurnosEmp($turn->id_empleado);
 			$c=3;
-			$user=$this->usuariosCRUD->getUsuario($t->id_cliente);
+			$user=$this->usuariosCRUD->getUsuario($turn->id_cliente);
 			$mail=$usuario->email;
 			$mensaje=$this->buildMensajeCancelar($c,$turn->nombre_cliente);
 			$config = array (
@@ -525,7 +525,7 @@ class Turnos extends CI_Controller {
 			$c=0;
 			foreach($turnos as $t){
 				
-				if(sizeof($turnos)==2){
+				if(sizeof($turnos)==1){
 					$c=2;
 					$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
 					$email=$usuario->email;
@@ -559,7 +559,7 @@ class Turnos extends CI_Controller {
 							$this->email->message($mensaje);
 							$this->email->send();				
 						}else if ($c==1){
-							$c=0;
+							
 							$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
 							$email=$usuario->email;
 							$mensaje=$this->buildMensajeCancelar($c,$t->nombre_cliente);
@@ -574,6 +574,7 @@ class Turnos extends CI_Controller {
 								$this->email->subject('Avance de turnos');
 								$this->email->message($mensaje);
 								$this->email->send();
+							$c=0;
 						}
 					
 					}else if($t->id_estado_turno==2){
@@ -582,7 +583,7 @@ class Turnos extends CI_Controller {
 					
 				}	
 			}
-            $this->panel();
+            $this->menuCliente();
 		}else{
             redirect('login');
         }   
@@ -746,9 +747,12 @@ class Turnos extends CI_Controller {
 		return $mensaje;
     }
 	public function deshabilitarTurnos($id_empleado){
+		
 		$turnos=$this->turnosCRUD->getTurnosEmp($id_empleado);
 		$empleado=$this->usuariosCRUD->getUsuario($id_empleado);
 		foreach($turnos as $t){
+			$turno = $this->turnosCRUD->avanzaTurno($t->id_turno,4); // 4: Cancelado
+			$this->turnosCRUD->registrarCambioEstadoTurno($t->id_turno,4);
 			$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
 			$email=$usuario->email;
 			$mensaje=$this->buildMensajeDeshabilitar($t->nombre_cliente,$empleado->nombre_usuario);
@@ -793,8 +797,12 @@ class Turnos extends CI_Controller {
 					return $mensaje;
 	}
 	public function deshabilitarTodosTurnos(){
-		$turnos=$this->turnosCRUD->getTurnosEmpleados();
-		/*foreach($turnos as $t){
+		$turno = $this->turnosCRUD->avanzaTurno($id_turno,4); // 4: Cancelado
+		$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,4);
+		$turnos=$this->turnosCRUD->getTurnosEnEspera();
+		foreach($turnos as $t){
+			$turno = $this->turnosCRUD->avanzaTurno($t->id_turno,4); // 4: Cancelado
+			$this->turnosCRUD->registrarCambioEstadoTurno($t->id_turno,4);
 			$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
 			$email=$usuario->email;
 			$mensaje=$this->buildMensajeDeshabilitar($t->nombre_cliente,$t->nombre_empleado);
@@ -810,12 +818,6 @@ class Turnos extends CI_Controller {
 							$this->email->message($mensaje);
 							$this->email->send();		
 		}
-		
-			redirect('Usuarios/panel');*/
-			$this->load->view("test.php", 
-					array(
-					"turnos" => $turnos
-					));
 		
 	}
 	
