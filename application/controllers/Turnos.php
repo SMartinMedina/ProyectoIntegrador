@@ -375,28 +375,29 @@ class Turnos extends CI_Controller {
         if(($this->session->userdata('id_rol_usuario') == 2)||($this->session->userdata('id_rol_usuario') == 4)){
             $turno = $this->turnosCRUD->avanzaTurno($id_turno,2); // 2: Siendo Atendido
             $this->turnosCRUD->registrarCambioEstadoTurno($id_turno,2);
-			$turno=$this->turnosCRUD->getTurno($id_turno);
-			$turnos=$this->turnosCRUD->getTurnosEmp($turno->id_empleado);
-			$x=0;
+			$turno_actual=$this->turnosCRUD->getTurno($id_turno);
+			$turnos=$this->turnosCRUD->getTurnosEmp($turno_actual->id_empleado);
+			$cliente=0;
 			foreach($turnos as $t){
 				if($t->id_turno>$id_turno){
-					if($x<5){
-						$x=$x+1;
-						$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
-						$email=$usuario->email;
-						$mensaje=$this->buildMensajeInicilizar($x,$t->nombre_cliente);
-						$config = array (
-							'mailtype' => 'html',
-							'charset'  => 'utf-8',
-							'priority' => '1'
-							 );
-							$this->email->initialize($config);
-							$this->email->from('no-reply@lastit.com', 'LastIt.com');
-							$this->email->to($email);
-							$this->email->subject('Avance de turnos');
-							$this->email->message($mensaje);
-							$this->email->send();
-						
+					if($t->id_cliente!=$turno_actual->id_cliente){
+						if($cliente<5){
+							$cliente=$cliente+1;
+							$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
+							$email=$usuario->email;
+							$mensaje=$this->buildMensajeInicilizar($cliente,$t->nombre_cliente);
+							$config = array (
+								'mailtype' => 'html',
+								'charset'  => 'utf-8',
+								'priority' => '1'
+								);
+								$this->email->initialize($config);
+								$this->email->from('no-reply@lastit.com', 'LastIt.com');
+								$this->email->to($email);
+								$this->email->subject('Avance de turnos');
+								$this->email->message($mensaje);
+								$this->email->send();
+						}		
 					
 					}
 				}  	
@@ -430,7 +431,7 @@ class Turnos extends CI_Controller {
 						
 							$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
 							$email=$usuario->email;
-							$mensaje=$this->buildMensajeCancelar($c,$t->nombre_cliente);
+							$mensaje=$this->buildMensajeCancelar($t->nombre_cliente);
 							$config = array (
 								'mailtype' => 'html',
 								'charset'  => 'utf-8',
@@ -449,11 +450,11 @@ class Turnos extends CI_Controller {
 		}else if($this->session->userdata('id_rol_usuario') == 3){
 			$turno = $this->turnosCRUD->avanzaTurno($id_turno,4); // 4: Cancelado
 			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,4);
-			$turn=$this->turnosCRUD->getTurno($id_turno);
-			$turnos=$this->turnosCRUD->getTurnosEmpEnEspera($turn->id_empleado);
+			$turno_actual=$this->turnosCRUD->getTurno($id_turno);
+			$turnos=$this->turnosCRUD->getTurnosEmpEnEspera($turno_actual->id_empleado);
 			foreach($turnos as $t){
 					if($t->id_turno>$id_turno){
-						
+						if($t->id_cliente!=$turno_actual->id_cliente){
 							$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
 							$email=$usuario->email;
 							$mensaje=$this->buildMensajeCancelar($t->nombre_cliente);
@@ -468,7 +469,7 @@ class Turnos extends CI_Controller {
 								$this->email->subject('Avance de turnos');
 								$this->email->message($mensaje);
 								$this->email->send();
-						
+							}
 						}
 							
 			}
@@ -489,7 +490,7 @@ class Turnos extends CI_Controller {
 										$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
 										$mensaje .= "<h2>Sistema de Turnos</h2>";
 										$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-										$mensaje .= "<p>Tinie menos tiempo que espera par ser atendido</p></td></tr>";
+										$mensaje .= "<p>Sea cancelado un turno, tiene que espera menos tiempo para ser atendido</p></td></tr>";
 										$mensaje .= "<tr style='background-color: white;'>";
 										$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
 										$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
@@ -501,8 +502,8 @@ class Turnos extends CI_Controller {
 		
 		return $mensaje ;
 	}
-	public function buildMensajeInicilizar($x,$nombre_cliente){
-		if($x==1){
+	public function buildMensajeInicilizar($cliente,$nombre_cliente){
+		if($cliente==1){
 					
 			$mensaje = "";
 			$mensaje .= "";
@@ -536,7 +537,7 @@ class Turnos extends CI_Controller {
 			$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
 			$mensaje .= "<h2>Sistema de Turnos</h2>";
 			$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-			$mensaje .= "<p>Faltan ".$x." persona por ser atendida antes de que le podamos prestar nuestros servicios. Por favor, sea paciente y este atento a nuestas aletas.</p></td></tr>";
+			$mensaje .= "<p>Faltan ".$cliente." persona por ser atendida antes de que le podamos prestar nuestros servicios. Por favor, sea paciente y este atento a nuestas aletas.</p></td></tr>";
 			$mensaje .= "<tr style='background-color: white;'>";
 			$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
 			$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";

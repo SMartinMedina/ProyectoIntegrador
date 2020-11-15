@@ -105,7 +105,9 @@
 									on
 										turnos.id_estado_turno = estados_turnos.id
 									where
-										turnos.fecha_baja is null;');
+										turnos.fecha_baja is null
+									order by turnos.id
+										');
 	    	return $q->result();
 	    }
 		function getTurnosClienteById($idCliente){
