@@ -35,8 +35,9 @@
 										turnos.id_estado_turno=1
 									and
 										turnos.id_empleado='.$id_empleado.'
-										order by turnos.id
-										group by turnos.id_cliente');
+									group by turnos.id_cliente
+									order by turnos.id
+									');
 	    	return $q->result();
 	    }
 		function getTurnosEmp($id_empleado){
