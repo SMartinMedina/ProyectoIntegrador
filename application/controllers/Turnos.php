@@ -498,7 +498,7 @@ class Turnos extends CI_Controller {
 										$mensaje .= "del estado de tu turno.<br /><br /> Podes consultarlo en el siguiente";
 										$mensaje .= "<a href='http://www.smartinweb.com/proyectointegrador'>";
 										$mensaje .= "link </a></p></td></tr></table></body></html>";
-		}
+		
 		return $mensaje ;
 	}
 	public function buildMensajeInicilizar($x,$nombre_cliente){
