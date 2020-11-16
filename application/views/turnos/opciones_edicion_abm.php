@@ -1,5 +1,5 @@
 <?php
-    if(($this->session->userdata('id_rol_usuario') == 2)||($this->session->userdata('id_rol_usuario') == 4)){
+    if(($this->session->userdata('id_rol_usuario') == 2)/*||($this->session->userdata('id_rol_usuario') == 4)*/){
         if($id_estado==1){
             echo anchor(
                 $seccion.'/inicializar/'.$id,           

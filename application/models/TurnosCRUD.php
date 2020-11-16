@@ -46,12 +46,17 @@
 										turnos.id_cliente,
 										cliente.nombre as nombre_cliente,
 										turnos.id_empleado,
+										empleado.nombre as nombre_empleado,
 										turnos.id_estado_turno,
 										estados_turnos.nombre as nombre_estado_turno,
 										turnos.id_especialidad,
 										especialidades_empleados.nombre as nombre_especialidades_usuarios
 									from
 										turnos
+									inner join
+										usuarios as empleado
+									on
+										turnos.id_empleado = empleado.id
 									inner join
 										usuarios as cliente
 									on
@@ -65,14 +70,14 @@
 									on
 										turnos.id_estado_turno = estados_turnos.id
 									where
-										turnos.fecha_baja is null
-									and
 										turnos.id_estado_turno!=3
 									and
 										turnos.id_estado_turno!=4
 									and
 										turnos.id_empleado='.$id_empleado.'
-										order by turnos.id');
+									and	
+										turnos.fecha_baja is null
+									order by turnos.id_empleado, turnos.id;');
 	    	return $q->result();
 	    }
 	    function getTurnos(){
@@ -319,7 +324,7 @@
 										turnos.id_estado_turno!=4
 									and	
 										turnos.fecha_baja is null
-									order by turnos.id;');
+									order by turnos.id_empleado, turnos.id;');
 	    	return $q->result();
 	    }	       	    	    
 		function getTurnosEnEspera(){

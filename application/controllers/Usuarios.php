@@ -398,9 +398,12 @@ class Usuarios extends CI_Controller {
 		}
 }
 public function noDisponibilidad($id_empleado){
-	$this->usuariosCRUD->disponibilidadbd($id_empleado,0);	
-	
-	
+	$this->usuariosCRUD->disponibilidadbd($id_empleado,0);		
+	if($this->session->userdata('id_rol_usuario') == 4){
+		$this->panel();
+	}else if($this->session->userdata('id_rol_usuario') == 2){
+		redirect('Turnos/panel');
+	}
 }
 
 	public function disponiblesTodos(){

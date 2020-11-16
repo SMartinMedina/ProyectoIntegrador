@@ -47,12 +47,12 @@
 			$this->load->view('general/boton_menu_lateral.php', array(
 																"seccionUrl" => "turnos",
 																"seccion" => "Turnos",
-																"icon" => " zmdi-book ",
+																"icon" => " zmdi-calendar-alt ",
 																"active" => $turnosActive ));
 			$this->load->view('general/boton_menu_lateral.php', array(
 																"seccionUrl" => "EspecialidadesEmpleados",
 																"seccion" => "Servicios",
-																"icon" => " zmdi-book ",
+																"icon" => " zmdi-cut ",
 																"active" => $serviciosActive ));
 			$this->load->view('general/boton_menu_lateral.php', array(
 																"seccionUrl" => "Roles",
@@ -62,12 +62,12 @@
 			$this->load->view('general/boton_menu_lateral.php', array(
 																"seccionUrl" => "Usuarios",
 																"seccion" => "Usuarios",
-																"icon" => " zmdi-book ",
+																"icon" => " zmdi-account ",
 																"active" => $usuariosActive ));
 			$this->load->view('general/boton_menu_lateral.php', array(
 																"seccionUrl" => "EstadosTurnos",
 																"seccion" => "Estados Turnos",
-																"icon" => " zmdi-book ",
+																"icon" => " zmdi-copy ",
 																"active" => $estadosTurnosActive ));
 
 		}else if($this->session->userdata('id_rol_usuario') == 2){
@@ -84,8 +84,8 @@
 			}
 			$this->load->view('general/boton_menu_lateral.php', array(
 																"seccionUrl" => "turnos",
-																"seccion" => "Lista de turnos",
-																"icon" => " zmdi-book ",
+																"seccion" => "Turnos",
+																"icon" => " zmdi-calendar-alt ",
 																"active" => $lista ));
 
 		}else if($this->session->userdata('id_rol_usuario') == 4){
@@ -106,13 +106,13 @@
 			}
 			$this->load->view('general/boton_menu_lateral.php', array(
 																"seccionUrl" => "turnos",
-																"seccion" => "Lista de turnos de especialistas",
-																"icon" => " zmdi-book ",
+																"seccion" => "Turnos",
+																"icon" => " zmdi-calendar-alt ",
 																"active" => $lista ));
 			$this->load->view('general/boton_menu_lateral.php', array(
 																	"seccionUrl" => "usuarios",
-																	"seccion" => "Lista de especialistas",
-																	"icon" => " zmdi-book ",
+																	"seccion" => "Especialistas",
+																	"icon" => " zmdi-account ",
 																	"active" => $especialistas ));													
 
 		}else if($this->session->userdata('id_rol_usuario') == 3){
@@ -139,7 +139,7 @@
 					<li>
 					<?php 
 						$linkLogout = "<div class=\"pull-left\">";
-						$linkLogout .= "<i class=\"zmdi zmdi-book mr-20\"></i>";
+						$linkLogout .= "<i class=\"zmdi zmdi-account-o mr-20\"></i>";
 						$linkLogout .= "<span class=\"right-nav-text\">Perfil</span>";
 						$linkLogout .= "</div>";
 						$linkLogout .= "<div class=\"clearfix\"></div>";							
@@ -154,7 +154,7 @@
 					<li>
 					<?php 
 						$linkLogout = "<div class=\"pull-left\">";
-						$linkLogout .= "<i class=\"zmdi zmdi-book mr-20\"></i>";
+						$linkLogout .= "<i class=\"zmdi zmdi-power-off-setting mr-20\"></i>";
 						$linkLogout .= "<span class=\"right-nav-text\">Salir</span>";
 						$linkLogout .= "</div>";
 						$linkLogout .= "<div class=\"clearfix\"></div>";							

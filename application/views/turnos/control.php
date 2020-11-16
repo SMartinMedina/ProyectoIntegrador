@@ -27,7 +27,7 @@
 					<!-- Title -->
 					<div class="row heading-bg">
 						<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-						  <h5 class="txt-dark">Turnos</h5>
+						  <h5 class="txt-dark">Bienvenido <?php echo $this->session->userdata('nombre_usuario'); ?></h5>
 						</div>
 						<!-- Breadcrumb -->
 						<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
@@ -45,7 +45,7 @@
 						<div class="panel panel-default card-view">
 							<div class="panel-heading">
 								<div class="pull-left">
-									<h6 class="panel-title txt-dark">Listado</h6>
+									<h6 class="panel-title txt-dark">Listado de Turnos</h6>
 								</div>
 								<div class="clearfix"></div>
 							</div>
@@ -77,6 +77,7 @@
 												</thead>
 												<tbody>
 											<?php
+												$primero_de_la_fila = 0;
 												foreach($turnos as $t){
 											?>
 											  	<tr>
@@ -120,8 +121,30 @@
 															echo $t->id_turno;
 														?>>
 													<?php
+														if($primero_de_la_fila == 0){
+															if($t->id_estado_turno == 2){//SIENDO ATENDIDO
+																echo anchor(
+														                'turnos/finalizar/'.$t->id_turno,
+														                '<i class="fa fa-edit" aria-hidden="true"></i> Finalizar ',     //'Link', 
+														                '')." | ";
+																$primero_de_la_fila = $t->id_cliente;
+															}else{
+																echo anchor(
+													                'turnos/inicializar/'.$t->id_turno,
+													                '<i class="fa fa-edit" aria-hidden="true"></i> Atender ',       //'Link', 
+													                '')." | ";
+																
+															}
+														}
+
+											                echo anchor(
+											                    'turnos/cancelar/'.$t->id_turno,
+											                    '<i class="fa fa-edit" aria-hidden="true"></i> Cancelar ',      //'Link', 
+											                    '');
+
+
 														//BOTONES DE EDICION
-														$urlParts = explode("/", $main);
+														/*$urlParts = explode("/", $main);
 														$seccionUrl = $urlParts[0]; 
 														$this->load->view("turnos/opciones_edicion_abm.php", 
 																		array(
@@ -129,7 +152,8 @@
 																			"id" => $t->id_turno,
 																			"id_estado"=>$t->id_estado_turno
 																		)
-																	);
+																	);*/
+
 													?>
 													</td>
 												  </tr>

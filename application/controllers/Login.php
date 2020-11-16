@@ -32,7 +32,7 @@ class Login extends CI_Controller {
                                         "main" => 'turnos/panel.php',
                                         "footer" => 'footer_unlogged.php',
                                         "turnos" => $turnos ));
-        }elseif($this->session->userdata('id_rol_usuario') == 2){
+        }else if($this->session->userdata('id_rol_usuario') == 2){
                 $id_empleado=$this->session->userdata('id_usuario');
                 $turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
                 $empleado = $this->usuariosCRUD->getEmpleadodiponibilidad($this->session->userdata('id_usuario'));
@@ -75,7 +75,7 @@ class Login extends CI_Controller {
                 "empleados" => $empleados,
                 "id_empleado"=> $id_empleado));                         
         }else{
-                            redirect('login');
+            redirect('login');
         }       
     }
 

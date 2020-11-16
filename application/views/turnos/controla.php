@@ -45,26 +45,67 @@
 						<div class="panel panel-default card-view">
 							<div class="panel-heading">
 								<div class="pull-left">
-									<h6 class="panel-title txt-dark">Listado</h6>
+									<h6 class="panel-title txt-dark">Filtro por Empleados</h6>
 								</div>
 								<div class="clearfix"></div>
 							</div>
 							<div class="panel-wrapper collapse in">
 								<div class="panel-body">
-									<form method="post" action="<?php echo site_url('panelturno');?>">		
-										<select name="empleado">
-											<option value="0">todos los turnos</option>
+									<form method="post" action="<?php echo site_url('panelturno');?>" id ="filtroPorEmpleado">		
+										<select class="form-control" id = "empleado" name="empleado" onchange="submitForm()">
+											<option value="0">TODOS</option>
 											<?php
 												foreach($empleados as $e){
-											?><option value="<?php echo $e->id;?>"<?php if($e->id==$id_empleado){ echo 'selected="selected"';}?>><?php echo $e->nombre_usuario." ".$e->apellido_usuario;}?>
+											?><option value="<?php echo $e->id;?>"
+												<?php 
+													if($e->id==$id_empleado){ 
+														echo 'selected="selected"';
+													}
+												?>
+												>
+												<?php echo $e->nombre_usuario." ".$e->apellido_usuario;?>
 											</option>
+											<?php 
+												}
+											?>
 										</select>
-										<input type="submit" value="Acotar"></input>
 									</form>
-								
-									<!--<p class="text-muted">Add class <code>table</code> in table tag.</p>-->
-									
-									
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--<p class="text-muted">Add class <code>table</code> in table tag.</p>-->
+					<?php
+						$id_empleado_listado_actual = 0;
+						foreach($turnos as $t){
+
+							if($id_empleado_listado_actual != $t->id_empleado){
+								if($id_empleado_listado_actual != 0){
+									//CIERRE DE LA TABLA DEL LISTADO DEL EMPLEADO ANTERIOR
+					?>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					<?php								
+								}
+								$primero_de_la_fila = 0;
+								$id_empleado_listado_actual = $t->id_empleado;
+					?>					
+					<div class="col-sm-12">
+						<div class="panel panel-default card-view">
+							<div class="panel-heading">
+								<div class="pull-left">
+									<h6 class="panel-title txt-dark">Fila para atenderse con: <?php echo $t->nombre_empleado; ?></h6>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="panel-wrapper collapse in">
+								<div class="panel-body">
 									<div class="table-wrap mt-40">
 										<div class="table-responsive">
 											<table class="table mb-0">
@@ -78,9 +119,9 @@
 												  </tr>
 												</thead>
 												<tbody>
-											<?php
-												foreach($turnos as $t){
-											?>
+							<?php
+								}
+							?>
 											  	<tr>
 													<td>
 														<?php
@@ -122,8 +163,30 @@
 															echo $t->id_turno;
 														?>>
 													<?php
+														if($primero_de_la_fila == 0){
+															if($t->id_estado_turno == 2){//SIENDO ATENDIDO
+																echo anchor(
+														                'turnos/finalizar/'.$t->id_turno,
+														                '<i class="fa fa-edit" aria-hidden="true"></i> Finalizar ',     //'Link', 
+														                '')."  |  ";;
+																$primero_de_la_fila = $t->id_cliente;
+															}else{
+																echo anchor(
+													                'turnos/inicializar/'.$t->id_turno,
+													                '<i class="fa fa-edit" aria-hidden="true"></i> Atender ',       //'Link', 
+													                '')." | ";
+																
+															}
+														}
+
+											                echo anchor(
+											                    'turnos/cancelar/'.$t->id_turno,
+											                    '<i class="fa fa-edit" aria-hidden="true"></i> Cancelar ',      //'Link', 
+											                    '');
+
+
 														//BOTONES DE EDICION
-														$urlParts = explode("/", $main);
+														/*$urlParts = explode("/", $main);
 														$seccionUrl = $urlParts[0]; 
 														$this->load->view("turnos/opciones_edicion_abm.php", 
 																		array(
@@ -131,7 +194,8 @@
 																			"id" => $t->id_turno,
 																			"id_estado"=>$t->id_estado_turno
 																		)
-																	);
+																	);*/
+
 													?>
 													</td>
 												  </tr>
@@ -155,3 +219,8 @@
 		
 		</div>
 	</body>
+	<script type="text/javascript">
+		function submitForm(){
+			$("#filtroPorEmpleado").submit();
+		}
+	</script>
