@@ -31,7 +31,7 @@ if($cliente==0){
 	$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
 	$mensaje .= "<h2>Sistema de Turnos</h2>";
 	$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-	$mensaje .= "<p>Pronto, en ".$cant_minutos_demora." minutos, lo atenderemos a usted. Por favor, acerquese a la peluqueria</p></td></tr>";
+	$mensaje .= "<p>Pronto, en ".$cant_minutos_demora." minutos,".$nombre_empleado." lo atendera a usted. Por favor, acerquese a la peluqueria</p></td></tr>";
 	$mensaje .= "<tr style='background-color: white;'>";
 	$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
 	$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
@@ -53,7 +53,7 @@ if($cliente==0){
 	$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
 	$mensaje .= "<h2>Sistema de Turnos</h2>";
 	$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-	$mensaje .= "<p>Faltan ".$cliente." personas que debemos atender antes de que le podamos prestar nuestros servicios. Estimamos que le faltan ".$cant_minutos_demora." minutos para se atendido. Por favor, sea paciente y este atento a nuestas aletas.</p></td></tr>";
+	$mensaje .= "<p>Faltan ".$cliente." personas que ".$nombre_empleado." debe atender antes de que le podamos prestar nuestros servicios. Estimamos que le faltan ".$cant_minutos_demora." minutos para se atendido. Por favor, sea paciente y este atento a nuestas aletas.</p></td></tr>";
 	$mensaje .= "<tr style='background-color: white;'>";
 	$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
 	$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
