@@ -185,9 +185,26 @@
 	    	return $q->result();
 
 	    }
+		
 
-
-	    
+	    function getTiempoFiladeEspera($id_usuario,$id_especialidad,$id_turno){
+			$q = $this->db->query('select 
+										count(*) as cant,
+										turnos.id_especialidad as id_especialidad
+									from
+										turnos
+									where
+										id_empleado = '.$id_usuario.'
+									and
+										id_especialidad = '.$id_especialidad.'
+									and									
+										(id_estado_turno = 1
+									or
+										id_estado_turno=2)
+									and
+										id<'.$id_turno);
+	    	return $q->result();
+		}
 
 	    function getDemoraEmpleados($id_empleado){
 	    	$q = $this->db->query('select

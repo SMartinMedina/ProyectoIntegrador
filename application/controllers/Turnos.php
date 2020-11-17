@@ -396,7 +396,8 @@ class Turnos extends CI_Controller {
             $turno = $this->turnosCRUD->avanzaTurno($id_turno,2); // 2: Siendo Atendido
             $this->turnosCRUD->registrarCambioEstadoTurno($id_turno,2);
 			$turno_actual=$this->turnosCRUD->getTurno($id_turno);
-			$turnos=$this->turnosCRUD->getTurnosEmp($turno_actual->id_empleado);
+			$empleado_especialidad=$this->usuariosEspecialidadesCRUD->getEspecialidadesEmpleado($turno_actual->id_empleado);
+			$turnos=$this->turnosCRUD->getTurnosEmpEnEspera($turno_actual->id_empleado);
 			$cliente=0;
 			$usuario=$this->usuariosCRUD->getUsuario($turno_actual->id_cliente);
 			$email=$usuario->email;
@@ -417,6 +418,16 @@ class Turnos extends CI_Controller {
 					if($t->id_cliente!=$turno_actual->id_cliente){
 						if($cliente<5){
 							$cliente=$cliente+1;
+							$cant_minutos_demora = 0;
+								foreach ($empleado_especialidad as $ee) {
+									if($turno_actual->id_empleado == $ee->id_usuario){
+										$cantTurnosEnEsperaPorEmpPorEsp = $this->turnosCRUD->getTiempoFiladeEspera(
+																								$ee->id_usuario,
+																								$ee->id_especialidad,
+																								$t->id_turno);
+										$cant_minutos_demora = intval($cant_minutos_demora) + (intval($cantTurnosEnEsperaPorEmpPorEsp[0]->cant) * intval($ee->demora_min));
+									}
+								}
 							$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
 							$email=$usuario->email;
 							$mensaje=$this->buildMensajeInicilizar($cliente,$t->nombre_cliente);
@@ -458,6 +469,7 @@ class Turnos extends CI_Controller {
 			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,4);
 			$turno_actual=$this->turnosCRUD->getTurno($id_turno);
 			$turnos=$this->turnosCRUD->getTurnosEmpEnEspera($turno_actual->id_empleado);
+			$empleado_especialidad=$this->usuariosEspecialidadesCRUD->getEspecialidadesEmpleado($turno_actual->id_empleado);
 			$cliente_cancelado=1;
 			$usuario=$this->usuariosCRUD->getUsuario($turno_actual->id_cliente);
 							$email=$usuario->email;
@@ -472,14 +484,25 @@ class Turnos extends CI_Controller {
 								$this->email->to($email);
 								$this->email->subject('Avance de turnos');
 								$this->email->message($mensaje);
-								$this->email->send();
+								$this->email->send();				
 			$cliente_cancelado=0;
 			foreach($turnos as $t){
 					if($t->id_turno>$id_turno){
 						if($t->id_cliente!=$turno_actual->id_cliente){
+							$cant_minutos_demora = 0;
+								foreach ($empleado_especialidad as $ee) {
+									if($turno_actual->id_empleado == $ee->id_usuario){
+										$cantTurnosEnEsperaPorEmpPorEsp = $this->turnosCRUD->getTiempoFiladeEspera(
+																								$ee->id_usuario,
+																								$ee->id_especialidad,
+																								$t->id_turno);
+										$cant_minutos_demora = intval($cant_minutos_demora) + (intval($cantTurnosEnEsperaPorEmpPorEsp[0]->cant) * intval($ee->demora_min));
+									}
+								}
+							
 							$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
 							$email=$usuario->email;
-							$mensaje=$this->buildMensajeCancelar($cliente_cancelado,$t->nombre_cliente);
+							$mensaje=$this->buildMensajeCancelar($cliente_cancelado,$t->nombre_cliente,$cant_minutos_demora);
 							$config = array (
 								'mailtype' => 'html',
 								'charset'  => 'utf-8',
@@ -491,19 +514,33 @@ class Turnos extends CI_Controller {
 								$this->email->subject('Avance de turnos');
 								$this->email->message($mensaje);
 								$this->email->send();
-					}
-				}	
+						}	
+					}	
 			}
+				
             $this->panel();
 		}else if($this->session->userdata('id_rol_usuario') == 3){
 			$turno = $this->turnosCRUD->avanzaTurno($id_turno,4); // 4: Cancelado
 			$this->turnosCRUD->registrarCambioEstadoTurno($id_turno,4);
 			$turno_actual=$this->turnosCRUD->getTurno($id_turno);
 			$turnos=$this->turnosCRUD->getTurnosEmpEnEspera($turno_actual->id_empleado);
+			$empleado_especialidad=$this->usuariosEspecialidadesCRUD->getEspecialidadesEmpleado($turno_actual->id_empleado);
 			$cliente_cancelado=0;
 			foreach($turnos as $t){
-					if($t->id_turno>$id_turno){
-						if($t->id_cliente!=$turno_actual->id_cliente){
+				if($t->id_turno>$id_turno){
+					if($t->id_cliente!=$turno_actual->id_cliente){
+						$cant_minutos_demora = 0;
+							foreach ($empleado_especialidad as $ee) {
+								if($turno_actual->id_empleado == $ee->id_usuario){
+									$cantTurnosEnEsperaPorEmpPorEsp = $this->turnosCRUD->getTiempoFiladeEspera(
+																						$ee->id_usuario,
+																						$ee->id_especialidad,
+																						$t->id_turno);
+									$cant_minutos_demora = intval($cant_minutos_demora) + (intval($cantTurnosEnEsperaPorEmpPorEsp[0]->cant) * intval($ee->demora_min));
+								}
+							}
+							$nombre_cliente=$t->nombre_cliente;
+						
 							$usuario=$this->usuariosCRUD->getUsuario($t->id_cliente);
 							$email=$usuario->email;
 							$mensaje=$this->buildMensajeCancelar($cliente_cancelado=0,$t->nombre_cliente);
@@ -517,17 +554,18 @@ class Turnos extends CI_Controller {
 								$this->email->to($email);
 								$this->email->subject('Avance de turnos');
 								$this->email->message($mensaje);
-								$this->email->send();
-							}
-						}
-							
+								$this->email->send();			
+						
+					}
+				}		
+						
 			}
-            $this->menuCliente();
+            $this->panelTurnosPorCliente();
 		}else{
             redirect('login');
         }   
 	}
-	public function buildMensajeCancelar($cliente_cancelado,$nombre_cliente){
+	public function buildMensajeCancelar($cliente_cancelado,$nombre_cliente,$cant_minutos_demora){
 						if($cliente_cancelado==1){
 							$mensaje = "";
 										$mensaje .= "";
@@ -549,25 +587,25 @@ class Turnos extends CI_Controller {
 										$mensaje .= "<a href='http://www.smartinweb.com/proyectointegrador'>";
 										$mensaje .= "link </a></p></td></tr></table></body></html>";
 						}else{
-										$mensaje = "";
-										$mensaje .= "";
-										$mensaje .= "<html><body><table style='width: 100%;'>";
-										$mensaje .= "<tr style='background-color: black; height: 50px;color:white;'>";
-										$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-										$mensaje .= "<h1><img src='http://www.smartinweb.com/proyectointegrador/img/logo.png'>IL FIGARO</h1></td></tr>";
-										$mensaje .= "<tr style='background-color: white;'>";
-										$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-										$mensaje .= "<h2>Sistema de Turnos</h2>";
-										$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-										$mensaje .= "<p>Sea cancelado un turno, tiene que espera menos tiempo para ser atendido</p></td></tr>";
-										$mensaje .= "<tr style='background-color: white;'>";
-										$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
-										$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
-										$mensaje .= "<h2>Gracias por confiar en nuestro sistema.</h2><p>";
-										$mensaje .= "Te recomendamos que estés pendiente a las alertas que te estaremos enviando para el seguimiento";
-										$mensaje .= "del estado de tu turno.<br /><br /> Podes consultarlo en el siguiente";
-										$mensaje .= "<a href='http://www.smartinweb.com/proyectointegrador'>";
-										$mensaje .= "link </a></p></td></tr></table></body></html>";
+							$mensaje = "";
+							$mensaje .= "";
+							$mensaje .= "<html><body><table style='width: 100%;'>";
+							$mensaje .= "<tr style='background-color: black; height: 50px;color:white;'>";
+							$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+							$mensaje .= "<h1><img src='http://www.smartinweb.com/proyectointegrador/img/logo.png'>IL FIGARO</h1></td></tr>";
+							$mensaje .= "<tr style='background-color: white;'>";
+							$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+							$mensaje .= "<h2>Sistema de Turnos</h2>";
+							$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
+							$mensaje .= "<p>Sea cancelado un turno, ahora tiene que espera ".$cant_minutos_demora." minutos para ser atendido</p></td></tr>";
+							$mensaje .= "<tr style='background-color: white;'>";
+							$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
+							$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
+							$mensaje .= "<h2>Gracias por confiar en nuestro sistema.</h2><p>";
+							$mensaje .= "Te recomendamos que estés pendiente a las alertas que te estaremos enviando para el seguimiento";
+							$mensaje .= "del estado de tu turno.<br /><br /> Podes consultarlo en el siguiente";
+							$mensaje .= "<a href='http://www.smartinweb.com/proyectointegrador'>";
+							$mensaje .= "link </a></p></td></tr></table></body></html>";
 						}
 		return $mensaje ;
 	}
@@ -604,7 +642,7 @@ class Turnos extends CI_Controller {
 			$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
 			$mensaje .= "<h2>Sistema de Turnos</h2>";
 			$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-			$mensaje .= "<p>Pronto, lo atenderemos a usted. Por favor, acerquese a la peluqueria</p></td></tr>";
+			$mensaje .= "<p>Pronto, en ".$cant_minutos_demora." minutos, lo atenderemos a usted. Por favor, acerquese a la peluqueria</p></td></tr>";
 			$mensaje .= "<tr style='background-color: white;'>";
 			$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
 			$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
@@ -626,7 +664,7 @@ class Turnos extends CI_Controller {
 			$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
 			$mensaje .= "<h2>Sistema de Turnos</h2>";
 			$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-			$mensaje .= "<p>Faltan ".$cliente." personas que debemos atender antes de que le podamos prestar nuestros servicios. Por favor, sea paciente y este atento a nuestas aletas.</p></td></tr>";
+			$mensaje .= "<p>Faltan ".$cliente." personas que debemos atender antes de que le podamos prestar nuestros servicios. Estimamos que le faltan ".$cant_minutos_demora." minutos para se atendido. Por favor, sea paciente y este atento a nuestas aletas.</p></td></tr>";
 			$mensaje .= "<tr style='background-color: white;'>";
 			$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
 			$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";

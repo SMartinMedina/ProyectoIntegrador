@@ -87,6 +87,6 @@ class EspecialidadesEmpleadosCRUD extends CI_Model {
 										especialidades_empleados.fecha_baja is null');
 	    	return $q->result();
 	    }	    
-    
+		
 }
 ?>
