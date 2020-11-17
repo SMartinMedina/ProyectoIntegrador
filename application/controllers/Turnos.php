@@ -143,7 +143,8 @@ class Turnos extends CI_Controller {
 								$cant_minutos_demora = intval($cant_minutos_demora) + (intval($cantTurnosEnEsperaPorEmpPorEsp[0]->cant) * intval($ee->demora_min));
 							}
 						}
-							$emp_esp = array(
+						
+								$emp_esp = array(
 											'id' => $ee->id, 
 											'id_usuario' => $e->id, 
 											'nombre_empleado' => $ee->nombre_empleado, 
@@ -151,9 +152,10 @@ class Turnos extends CI_Controller {
 											'nombre_especialidad_empleado' => $ee->nombre_especialidad_empleado, 
 											'demora_empleado' => $cant_minutos_demora 
 										);
-							array_push($empleados_especialidades, $emp_esp);
-
-					}
+								array_push($empleados_especialidades, $emp_esp);
+							
+									
+					}	
 
 					
 						$this->load->view("index.php", 
@@ -165,6 +167,7 @@ class Turnos extends CI_Controller {
 										"empleados" => $empleados,
 										"especialidades" => $especialidades,
 										"empleados_especialidades" => $empleados_especialidades_bd,
+										"turnos_cliente"=>$turnos_cliente,
 										"demora_empleado" => $empleados_especialidades));
 										
 				}else{

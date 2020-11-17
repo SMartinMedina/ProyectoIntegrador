@@ -74,6 +74,13 @@ $this->load->view("general/menu_lateral.php");
 													</label>
 <?php 
 	foreach ($especialidades as $e) {
+		$ya_tiene_turno=0;
+		foreach($turnos_cliente as $tc){
+			if($e->id==$tc->id_especialidad){
+				$ya_tiene_turno=1;
+			}
+		}
+		if($ya_tiene_turno==0){
 ?>
 	<div class="checkbox checkbox-success checkbox-group required">
 		<input id="checkboxServicio<?php echo $e->id; ?>" type="checkbox" 
@@ -83,7 +90,8 @@ $this->load->view("general/menu_lateral.php");
 			<?php echo $e->nombre;?>
 		</label>
 	</div>
-<?php
+<?php		
+		}
 	}
  ?>
 
