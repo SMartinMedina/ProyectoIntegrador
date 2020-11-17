@@ -71,6 +71,7 @@
 													<th>Empleado</th>
 													<th>Servicio</th>
 													<th>Estado</th>
+													<th>Fecha alta</th>
 													<th></th>
 												  </tr>
 												</thead>
@@ -136,6 +137,11 @@
 															</span>
 														<?php
 															}
+														?>
+													</td>
+													<td>
+														<?php
+															echo $t->fecha_alta;
 														?>
 													</td>
 													<td>

@@ -50,7 +50,9 @@
 										turnos.id_estado_turno,
 										estados_turnos.nombre as nombre_estado_turno,
 										turnos.id_especialidad,
-										especialidades_empleados.nombre as nombre_especialidades_usuarios
+										especialidades_empleados.nombre as nombre_especialidades_usuarios,
+										turnos.fecha_alta
+
 									from
 										turnos
 									inner join
@@ -90,7 +92,8 @@
 										turnos.id_estado_turno,
 										estados_turnos.nombre as nombre_estado_turno,
 										turnos.id_especialidad,
-										especialidades_empleados.nombre as nombre_especialidades_usuarios
+										especialidades_empleados.nombre as nombre_especialidades_usuarios,
+										turnos.fecha_alta
 									from
 										turnos
 									inner join
@@ -125,7 +128,9 @@
 										turnos.id_estado_turno,
 										estados_turnos.nombre as nombre_estado_turno,
 										turnos.id_especialidad,
-										especialidades_empleados.nombre as nombre_especialidades_usuarios
+										especialidades_empleados.nombre as nombre_especialidades_usuarios,
+										turnos.fecha_alta
+
 									from
 										turnos
 									inner join
@@ -316,7 +321,8 @@
 										turnos.id_estado_turno,
 										estados_turnos.nombre as nombre_estado_turno,
 										turnos.id_especialidad,
-										especialidades_empleados.nombre as nombre_especialidades_usuarios
+										especialidades_empleados.nombre as nombre_especialidades_usuarios,
+										turnos.fecha_alta
 									from
 										turnos
 									inner join

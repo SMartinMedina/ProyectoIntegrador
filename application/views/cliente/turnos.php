@@ -69,6 +69,8 @@
 													<th>#</th>
 													<th>Servicio</th>
 													<th>Atiende</th>
+													<th>Fecha alta</th>
+													<th>Tiempo de espera</th>
 												  </tr>
 												</thead>
 												<tbody>
@@ -89,6 +91,20 @@
 													<td>
 														<?php
 															echo $t->nombre_empleado;
+														?>
+													</td>
+													<td>
+														<?php
+															echo $t->fecha_alta;
+														?>
+													</td>
+													<td>
+														<?php
+															foreach($turnos_cliente as $tc){
+																if($t->id_turno==$tc['id_turno']){
+																	echo $tc['tiempo'];
+																}
+															}
 														?>
 													</td>
 													<td id="boton".<?php

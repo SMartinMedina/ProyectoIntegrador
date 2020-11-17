@@ -67,12 +67,48 @@ class Turnos extends CI_Controller {
 	public function panelTurnosPorCliente(){
 		if($this->session->userdata('id_rol_usuario') == 3){	
 			$turnos = $this->turnosCRUD->getTurnosClienteById($this->session->userdata('id_usuario'));
+			$empleados_especialidades_bd = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidades();
+			$turnos_cliente = array();
+			foreach($turnos as $t){	
+				$tiempo='';
+				$horas=0;
+				$cant_minutos_demora = 0;
+					foreach ($empleados_especialidades_bd as $ee) {
+						if($t->id_empleado == $ee->id_usuario){
+							$cantTurnosEnEsperaPorEmpPorEsp = $this->turnosCRUD->getTiempoFiladeEspera(
+																										$t->id_empleado,
+																										$ee->id_especialidad,
+																										$t->id_turno);
+										
+							$cant_minutos_demora = intval($cant_minutos_demora) + (intval($cantTurnosEnEsperaPorEmpPorEsp[0]->cant) * intval($ee->demora_min));
+						}
+					}
+					while($cant_minutos_demora>=60){
+						
+							$horas=$horas+1;
+							$cant_minutos_demora=$cant_minutos_demora-60;
+
+					}
+					$tiempo=$horas.':';
+					if(intval($cant_minutos_demora)<10){
+						$tiempo .='0'.intval($cant_minutos_demora);
+					}else{
+						$tiempo .=intval($cant_minutos_demora);
+					}
+				$turno = array(
+								'id_turno' => $t->id_turno, 
+								'tiempo' => $tiempo
+								);
+				array_push($turnos_cliente,$turno);
+			}
 			$this->load->view("index.php", 
 								array(
 									"header" => 'header_unlogged.php',
 									"main" => 'cliente/turnos.php',
 									"footer" => 'footer_unlogged.php',
-									"turnos" => $turnos ));
+									"turnos_cliente" => $turnos_cliente,
+									"turnos_cliente" => $turnos_cliente,
+									"turnos"=>$turnos ));								
 		}else{
 			redirect('login');
 		}	
@@ -671,7 +707,7 @@ class Turnos extends CI_Controller {
 			$mensaje .= "<td style='padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";
 			$mensaje .= "<h2>Sistema de Turnos</h2>";
 			$mensaje .= "<h2>Hola ".$nombre_cliente."</h2>";
-			$mensaje .= "<p>Faltan ".$cliente." personas que ".$nombre_empleado." debe atender antes de que lo pueda atender. Estimamos que le faltan ".$cant_minutos_demora." minutos para se atendido. Por favor, sea paciente y este atento a nuestas aletas.</p></td></tr>";
+			$mensaje .= "<p>Faltan ".$cliente." personas que ".$nombre_empleado." debe atender antes de que lo pueda atender. Estimamos que le faltan ".$cant_minutos_demora." minutos para atenderlo. Por favor, sea paciente y este atento a nuestas aletas.</p></td></tr>";
 			$mensaje .= "<tr style='background-color: white;'>";
 			$mensaje .= "</td></tr><tr style='background-color: black; height: 50px;color:white;'>"; 
 			$mensaje .= "<td style=' padding-top: 10px; padding-bottom: 10px;padding-left: 20px; padding-right: 20px;'>";

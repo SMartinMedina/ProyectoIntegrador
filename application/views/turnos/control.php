@@ -72,6 +72,7 @@
 													<th>Cliente</th>
 													<th>Servicio</th>
 													<th>Estado</th>
+													<th>Fecha alta</th>
 													<th></th>
 												  </tr>
 												</thead>
@@ -127,6 +128,11 @@
 														}else{
 															?><span class="label label-danger">Ocupado</span><?php
 														}
+														?>
+													</td>
+													<td>
+														<?php
+															echo $t->fecha_alta;
 														?>
 													</td>
 													<td id="boton".<?php
