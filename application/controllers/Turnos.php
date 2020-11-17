@@ -415,7 +415,7 @@ class Turnos extends CI_Controller {
 								$this->email->to($email);
 								$this->email->subject('Avance de turnos');
 								$this->email->message($mensaje);
-								$this->email->send();*/
+								$this->email->send();
 			foreach($turnos as $t){
 				if($t->id_turno>$id_turno){
 					if($t->id_cliente!=$turno_actual->id_cliente){
