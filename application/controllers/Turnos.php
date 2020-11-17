@@ -21,7 +21,7 @@ class Turnos extends CI_Controller {
                                         "turnos" => $turnos ));
         }elseif($this->session->userdata('id_rol_usuario') == 2){
             //$empleados = $this->usuariosCRUD->getEmpleadoshabiles();
-            //$turnos = $this->turnosCRUD->getTurnos();
+            $todos_turnos = $this->turnosCRUD->getTurnosEmpleados();
             $id_empleado=$this->session->userdata('id_usuario');
             $turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
             $empleado = $this->usuariosCRUD->getEmpleadodiponibilidad($this->session->userdata('id_usuario'));
@@ -35,7 +35,8 @@ class Turnos extends CI_Controller {
                                         "header" => 'header_unlogged.php',
                                         "main" => 'turnos/control.php',
                                         "footer" => 'footer_unlogged.php',
-                                        "turnos" => $turnos,
+										"turnos" => $turnos,
+										"todos_turnos"=> $todos_turnos,
                                         "horario_entrada" =>$horario_entrada,
                                         "horario_salida"=>$horario_salida,
                                         "id"=>$id));    
@@ -44,9 +45,11 @@ class Turnos extends CI_Controller {
             $id_empleado=0;
             if((isset($_POST['empleado']))&&($_POST['empleado']!=0)){
                 $id_empleado=$_POST['empleado'];
-                $turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
+				$turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
+				$todos_turnos = $this->turnosCRUD->getTurnosEmpleados();
             }else{
-                $turnos = $this->turnosCRUD->getTurnosEmpleados();
+				$turnos = $this->turnosCRUD->getTurnosEmpleados();
+				$todos_turnos = $this->turnosCRUD->getTurnosEmpleados();
             }
             $this->load->view("index.php", 
                 array(
@@ -54,7 +57,8 @@ class Turnos extends CI_Controller {
                 "main" => 'turnos/controla.php',
                 "footer" => 'footer_unlogged.php',
                 "turnos" => $turnos, 
-                "empleados" => $empleados,
+				"empleados" => $empleados,
+				"todos_turnos"=> $todos_turnos,
                 "id_empleado"=> $id_empleado));                         
         }else{
             redirect('login');
@@ -123,45 +127,58 @@ class Turnos extends CI_Controller {
 			$empleados = $this->usuariosCRUD->getEmpleadosHabiles();
 			$especialidades = $this->especialidadesEmpleadosCRUD->getEspecialidadesDisponibles();
 			$empleados_especialidades_bd = $this->usuariosEspecialidadesCRUD->getUsuariosEspecialidadesHabiles();
-
+			$turnos_cliente=$this->turnosCRUD->getTurnosClienteById($this->session->userdata('id_usuario'));
 			$length=sizeof($empleados);
 			$empleados_especialidades = array();
 			if($length>0){
-			foreach ($empleados as $e) {
-				$cant_minutos_demora = 0;
-				foreach ($empleados_especialidades_bd as $ee) {
-					if($e->id == $ee->id_usuario){
-						$cantTurnosEnEsperaPorEmpPorEsp = $this->turnosCRUD->getCantTurnosEnEsperaPorEmpPorEsp(
-																					$ee->id_usuario,
-																					$ee->id_especialidad);
-					
-						$cant_minutos_demora = intval($cant_minutos_demora) + (intval($cantTurnosEnEsperaPorEmpPorEsp[0]->cant) * intval($ee->demora_min));
+				if(sizeof($turnos_cliente)<3){
+					foreach ($empleados as $e) {
+						$cant_minutos_demora = 0;
+						foreach ($empleados_especialidades_bd as $ee) {
+							if($e->id == $ee->id_usuario){
+								$cantTurnosEnEsperaPorEmpPorEsp = $this->turnosCRUD->getCantTurnosEnEsperaPorEmpPorEsp(
+																							$ee->id_usuario,
+																							$ee->id_especialidad);
+							
+								$cant_minutos_demora = intval($cant_minutos_demora) + (intval($cantTurnosEnEsperaPorEmpPorEsp[0]->cant) * intval($ee->demora_min));
+							}
 						}
+							$emp_esp = array(
+											'id' => $ee->id, 
+											'id_usuario' => $e->id, 
+											'nombre_empleado' => $ee->nombre_empleado, 
+											'id_especialidad' => $ee->id_especialidad, 
+											'nombre_especialidad_empleado' => $ee->nombre_especialidad_empleado, 
+											'demora_empleado' => $cant_minutos_demora 
+										);
+							array_push($empleados_especialidades, $emp_esp);
+
 					}
-					$emp_esp = array(
-									'id' => $ee->id, 
-									'id_usuario' => $e->id, 
-									'nombre_empleado' => $ee->nombre_empleado, 
-									'id_especialidad' => $ee->id_especialidad, 
-									'nombre_especialidad_empleado' => $ee->nombre_especialidad_empleado, 
-									'demora_empleado' => $cant_minutos_demora 
-								);
-					array_push($empleados_especialidades, $emp_esp);
 
+					
+						$this->load->view("index.php", 
+									array(
+										"header" => 'header_unlogged.php',
+										"main" => 'cliente/alta.php',
+										"footer" => 'footer_unlogged.php',
+										"clientes" => $clientes,
+										"empleados" => $empleados,
+										"especialidades" => $especialidades,
+										"empleados_especialidades" => $empleados_especialidades_bd,
+										"demora_empleado" => $empleados_especialidades));
+										
+				}else{
+					$this->load->view("index.php", 
+									array(
+										"header" => 'header_unlogged.php',
+										"main" => 'cliente/limite_turno.php',
+										"footer" => 'footer_unlogged.php',
+										"clientes" => $clientes,
+										"empleados" => $empleados,
+										"especialidades" => $especialidades,
+										"empleados_especialidades" => $empleados_especialidades_bd,
+										"demora_empleado" => $empleados_especialidades));
 				}
-
-
-				$this->load->view("index.php", 
-							array(
-								"header" => 'header_unlogged.php',
-								"main" => 'cliente/alta.php',
-								"footer" => 'footer_unlogged.php',
-								"clientes" => $clientes,
-								"empleados" => $empleados,
-								"especialidades" => $especialidades,
-								"empleados_especialidades" => $empleados_especialidades_bd,
-								"demora_empleado" => $empleados_especialidades));
-				
 			}else{
 				$this->load->view("index.php", 
 							array(

@@ -76,9 +76,12 @@
 												  </tr>
 												</thead>
 												<tbody>
+												
 											<?php
+
 												$primero_de_la_fila = 0;
 												foreach($turnos as $t){
+													$estado_ocupado=0;
 											?>
 											  	<tr>
 													<td>
@@ -98,6 +101,12 @@
 													</td>
 													<td>
 														<?php
+															foreach($todos_turnos as $tt){
+																if(($t->id_cliente==$tt->id_cliente)&&($tt->id_estado_turno==2)&&($t->id_empleado!=$tt->id_empleado)){
+																	$estado_ocupado=1;
+																}
+															}
+														if($estado_ocupado ==0){
 															if( $t->id_estado_turno == 1){
 														?>
 															<span class="label label-warning">
@@ -115,12 +124,16 @@
 															</span>
 														<?php
 															}
+														}else{
+															?><span class="label label-danger">Ocupado</span><?php
+														}
 														?>
 													</td>
 													<td id="boton".<?php
 															echo $t->id_turno;
 														?>>
 													<?php
+													if($estado_ocupado ==0){
 														if($primero_de_la_fila == 0){
 															if($t->id_estado_turno == 2){//SIENDO ATENDIDO
 																echo anchor(
@@ -136,13 +149,13 @@
 																
 															}
 														}
-
+													}
 											                echo anchor(
 											                    'turnos/cancelar/'.$t->id_turno,
 											                    '<i class="fa fa-edit" aria-hidden="true"></i> Cancelar ',      //'Link', 
 											                    '');
 
-
+													
 														//BOTONES DE EDICION
 														/*$urlParts = explode("/", $main);
 														$seccionUrl = $urlParts[0]; 

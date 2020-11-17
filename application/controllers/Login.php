@@ -33,9 +33,10 @@ class Login extends CI_Controller {
                                         "footer" => 'footer_unlogged.php',
                                         "turnos" => $turnos ));
         }else if($this->session->userdata('id_rol_usuario') == 2){
-                $id_empleado=$this->session->userdata('id_usuario');
-                $turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
-                $empleado = $this->usuariosCRUD->getEmpleadodiponibilidad($this->session->userdata('id_usuario'));
+			$todos_turnos = $this->turnosCRUD->getTurnosEmpleados();
+            $id_empleado=$this->session->userdata('id_usuario');
+            $turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
+            $empleado = $this->usuariosCRUD->getEmpleadodiponibilidad($this->session->userdata('id_usuario'));
                 foreach($empleado as $e){
                                         $horario_entrada=$e->horario_entrada;
                                         $horario_salida=$e->horario_salida;
@@ -46,10 +47,11 @@ class Login extends CI_Controller {
                                         "header" => 'header_unlogged.php',
                                         "main" => 'turnos/control.php',
                                         "footer" => 'footer_unlogged.php',
-                                        "turnos" => $turnos,
+										"turnos" => $turnos,
+										"todos_turnos"=> $todos_turnos,
                                         "horario_entrada" =>$horario_entrada,
                                         "horario_salida"=>$horario_salida,
-                                        "id"=>$id));                                            
+                                        "id"=>$id));                                              
         }else if($this->session->userdata('id_rol_usuario') == 3){ // CLIENTE
             $this->load->view("index.php", 
                         array(
@@ -58,13 +60,15 @@ class Login extends CI_Controller {
                             "footer" => 'footer_unlogged.php'));
 
         }elseif($this->session->userdata('id_rol_usuario') == 4){
-            $empleados = $this->usuariosCRUD->getEmpleadosdiponibilidad();
+             $empleados = $this->usuariosCRUD->getEmpleados();
             $id_empleado=0;
             if((isset($_POST['empleado']))&&($_POST['empleado']!=0)){
                 $id_empleado=$_POST['empleado'];
-                $turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
+				$turnos = $this->turnosCRUD->getTurnosEmp($id_empleado);
+				$todos_turnos = $this->turnosCRUD->getTurnosEmpleados();
             }else{
-                $turnos = $this->turnosCRUD->getTurnosEmpleados();
+				$turnos = $this->turnosCRUD->getTurnosEmpleados();
+				$todos_turnos = $this->turnosCRUD->getTurnosEmpleados();
             }
             $this->load->view("index.php", 
                 array(
@@ -72,8 +76,9 @@ class Login extends CI_Controller {
                 "main" => 'turnos/controla.php',
                 "footer" => 'footer_unlogged.php',
                 "turnos" => $turnos, 
-                "empleados" => $empleados,
-                "id_empleado"=> $id_empleado));                         
+				"empleados" => $empleados,
+				"todos_turnos"=> $todos_turnos,
+                "id_empleado"=> $id_empleado));                          
         }else{
             redirect('login');
         }       
